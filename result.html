@@ -4,224 +4,223 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>전주시 상권 DB 검색 결과</title>
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
 
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Pretendard', sans-serif;
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:'Pretendard',sans-serif;
 }
 
-body {
-    background: #0b0b0b;
-    color: #fff;
-    padding: 40px 20px;
+body{
+    background:#0b0b0b;
+    color:#fff;
+    padding:40px 20px;
 }
 
-.container {
-    max-width: 1100px;
-    margin: 0 auto;
+.container{
+    max-width:1200px;
+    margin:0 auto;
 }
 
-.header-area {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #82F66F;
-    padding-bottom: 20px;
+.header-area{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-bottom:20px;
+    border-bottom:1px solid #82F66F;
+    padding-bottom:20px;
 }
 
-h1 {
-    font-size: 28px;
-    font-weight: 700;
+h1{
+    font-size:28px;
+    font-weight:700;
 }
 
-.target-region {
-    color: #82F66F;
+.target-region{
+    color:#82F66F;
 }
 
-.counter {
-    display: block;
-    margin-top: 6px;
-    color: #82F66F;
-    font-size: 15px;
+.counter{
+    display:block;
+    margin-top:6px;
+    color:#82F66F;
+    font-size:15px;
 }
 
-.btn-back {
-    color: #888;
-    text-decoration: none;
-    font-size: 14px;
+.btn-back{
+    color:#888;
+    text-decoration:none;
+    font-size:14px;
 }
 
-.btn-back:hover {
-    color: #82F66F;
+.btn-back:hover{
+    color:#82F66F;
 }
 
-.search-box {
-    margin-bottom: 20px;
+.search-box{
+    margin-bottom:20px;
 }
 
-.search-box input {
-    width: 100%;
-    padding: 14px 16px;
-    border-radius: 12px;
-    border: 1px solid #222;
-    background: #121212;
-    color: #fff;
-    font-size: 15px;
-    outline: none;
+.search-box input{
+    width:100%;
+    padding:14px 16px;
+    border-radius:12px;
+    border:1px solid #222;
+    background:#121212;
+    color:#fff;
+    font-size:15px;
+    outline:none;
 }
 
-.search-box input:focus {
-    border-color: #82F66F;
+.search-box input:focus{
+    border-color:#82F66F;
 }
 
-.table-wrapper {
-    background: #121212;
-    border-radius: 16px;
-    overflow-x: auto;
-    padding: 12px;
+.table-wrapper{
+    background:#121212;
+    border-radius:16px;
+    overflow:auto;
+    padding:12px;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 800px;
+table{
+    width:100%;
+    border-collapse:collapse;
 }
 
-th {
-    background: #1a1a1a;
-    color: #888;
-    font-size: 13px;
-    text-align: left;
-    padding: 16px;
-    position: sticky;
-    top: 0;
-    z-index: 1;
+th{
+    background:#1a1a1a;
+    color:#888;
+    font-size:13px;
+    text-align:left;
+    padding:16px;
+    position:sticky;
+    top:0;
+    z-index:5;
 }
 
-td {
-    padding: 16px;
-    border-bottom: 1px solid #1f1f1f;
-    color: #ccc;
-    vertical-align: top;
+td{
+    padding:16px;
+    border-bottom:1px solid #1f1f1f;
+    color:#ccc;
+    vertical-align:top;
 }
 
-tr:hover td {
-    background: #1a1a1a;
-    color: #fff;
+tr:hover td{
+    background:#1a1a1a;
+    color:#fff;
 }
 
-.td-name {
-    color: #82F66F;
-    font-weight: 600;
+.td-name a{
+    color:#82F66F;
+    text-decoration:none;
+    font-weight:600;
 }
 
-.td-branch {
-    color: #777;
+.td-name a:hover{
+    text-decoration:underline;
 }
 
-.td-zip {
-    color: #82F66F;
-    font-family: monospace;
+.td-branch{
+    color:#777;
 }
 
-.td-address {
-    white-space: normal;
-    word-break: break-word;
-    overflow-wrap: break-word;
-    line-height: 1.6;
+.td-zip{
+    color:#82F66F;
+    font-family:monospace;
 }
 
-.empty-message {
-    text-align: center;
-    padding: 40px;
-    color: #888;
+.address-cell{
+    white-space:normal;
+    line-height:1.6;
+    word-break:keep-all;
+}
+
+.empty-message{
+    text-align:center;
+    padding:40px;
+    color:#888;
 }
 
 /* 모바일 최적화 */
-@media (max-width: 768px) {
-    body {
-        padding: 24px 12px;
+
+@media (max-width:768px){
+
+    body{
+        padding:20px 10px;
     }
 
-    h1 {
-        font-size: 22px;
+    h1{
+        font-size:22px;
     }
 
-    .table-wrapper {
-        padding: 8px;
+    table{
+        min-width:100%;
     }
 
-    table {
-        min-width: 100%;
-        table-layout: fixed;
+    th{
+        font-size:12px;
+        padding:12px 8px;
     }
 
-    th,
-    td {
-        padding: 12px 10px;
-        font-size: 13px;
+    td{
+        font-size:13px;
+        padding:12px 8px;
     }
 
-    th:nth-child(1),
-    td:nth-child(1) {
-        width: 22%;
+    .address-cell{
+        min-width:220px;
+        white-space:normal;
+        word-break:break-word;
+        line-height:1.5;
     }
 
-    th:nth-child(2),
-    td:nth-child(2) {
-        width: 14%;
-    }
-
-    th:nth-child(3),
-    td:nth-child(3) {
-        width: 18%;
-    }
-
-    th:nth-child(4),
-    td:nth-child(4) {
-        width: 46%;
-    }
-
-    .td-address {
-        white-space: normal;
-        word-break: break-word;
-        overflow-wrap: break-word;
-        line-height: 1.5;
-    }
 }
+
 </style>
 </head>
+
 <body>
 
 <div class="container">
 
     <div class="header-area">
+
         <div>
             <h1>
                 전주시 <span class="target-region" id="region-title"></span> 상권 DB
             </h1>
-            <span class="counter" id="total-count">데이터 불러오는 중...</span>
+
+            <span class="counter" id="total-count">
+                데이터 불러오는 중...
+            </span>
         </div>
-        <a href="index.html" class="btn-back">← 뒤로가기</a>
+
+        <a href="index.html" class="btn-back">
+            ← 뒤로가기
+        </a>
+
     </div>
 
     <div class="search-box">
-        <input
+        <input 
             type="text"
             id="search-input"
-            placeholder="상호명, 지점명, 주소로 검색하세요"
+            placeholder="상호명을 입력하세요"
         >
     </div>
 
     <div class="table-wrapper">
+
         <table>
+
             <thead>
                 <tr>
                     <th>상호명</th>
@@ -230,85 +229,104 @@ tr:hover td {
                     <th>도로명주소</th>
                 </tr>
             </thead>
+
             <tbody id="result-table-body"></tbody>
+
         </table>
+
     </div>
 
 </div>
 
 <script>
+
 let allData = [];
 let filteredData = [];
 
-window.onload = function () {
+window.onload = function(){
+
     const params = new URLSearchParams(window.location.search);
+
     const region = params.get('region') || '완산구';
 
     document.getElementById('region-title').textContent = region;
 
     loadData(region);
 
-    const searchInput = document.getElementById('search-input');
+    document.getElementById('search-input')
+    .addEventListener('input', function(){
 
-    searchInput.addEventListener('input', function () {
         const keyword = this.value.trim().toLowerCase();
 
-        if (keyword === '') {
-            filteredData = [...allData];
-        } else {
-            filteredData = allData.filter(item => {
-                const name = (item.name || '').toLowerCase();
-                const branch = (item.branch || '').toLowerCase();
-                const address = (item.address || '').toLowerCase();
-                const zip = (item.zip || '').toLowerCase();
+        filteredData = allData.filter(item => {
 
-                return (
-                    name.includes(keyword) ||
-                    branch.includes(keyword) ||
-                    address.includes(keyword) ||
-                    zip.includes(keyword)
-                );
-            });
-        }
+            return (
+                item.name.toLowerCase().includes(keyword)
+            );
+
+        });
 
         renderTable(filteredData);
+
     });
+
 };
 
-async function loadData(region) {
+async function loadData(region){
+
     const tableBody = document.getElementById('result-table-body');
+
     const totalCountEl = document.getElementById('total-count');
 
-    try {
+    try{
+
         const response = await fetch('./data.json?v=' + Date.now());
-        if (!response.ok) throw new Error('JSON 로드 실패');
+
+        if(!response.ok){
+            throw new Error('JSON 로드 실패');
+        }
 
         const rawData = await response.json();
 
-        // 선택된 지역(완산구/덕진구) 데이터만 불러오기
         allData = rawData
-            .filter(item =>
+
+        .filter(item => {
+
+            return (
                 (item["시군구명"] || '').includes(region) ||
                 (item["도로명주소"] || '').includes(region)
-            )
-            .map(item => ({
-                name: item["상호명"] || '',
-                branch: item["지점명"] || '',
-                zip: item["신우편번호"] || '',
-                address: item["도로명주소"] || ''
-            }))
-            .sort((a, b) => a.name.localeCompare(b.name, 'ko'));
+            );
+
+        })
+
+        .map(item => ({
+
+            name : item["상호명"] || '',
+            branch : item["지점명"] || '',
+            zip : item["신우편번호"] || '',
+            address : item["도로명주소"] || ''
+
+        }))
+
+        .sort((a,b) =>
+            a.name.localeCompare(b.name,'ko')
+        );
 
         filteredData = [...allData];
 
         totalCountEl.textContent =
-            `총 ${allData.length.toLocaleString()}건 조회됨`;
+        `총 ${allData.length.toLocaleString()}건 조회됨`;
 
         renderTable(filteredData);
 
-    } catch (error) {
+    }
+
+    catch(error){
+
         console.error(error);
+
         totalCountEl.textContent = '데이터 로드 실패';
+
         tableBody.innerHTML = `
             <tr>
                 <td colspan="4" class="empty-message">
@@ -316,17 +334,22 @@ async function loadData(region) {
                 </td>
             </tr>
         `;
+
     }
+
 }
 
-function renderTable(data) {
+function renderTable(data){
+
     const tableBody = document.getElementById('result-table-body');
+
     const totalCountEl = document.getElementById('total-count');
 
     totalCountEl.textContent =
-        `총 ${data.length.toLocaleString()}건 조회됨`;
+    `총 ${data.length.toLocaleString()}건 조회됨`;
 
-    if (data.length === 0) {
+    if(data.length === 0){
+
         tableBody.innerHTML = `
             <tr>
                 <td colspan="4" class="empty-message">
@@ -334,49 +357,88 @@ function renderTable(data) {
                 </td>
             </tr>
         `;
+
         return;
+
     }
 
     tableBody.innerHTML = '';
 
     const batchSize = 500;
+
     let index = 0;
 
-    function renderBatch() {
+    function renderBatch(){
+
         const fragment = document.createDocumentFragment();
 
-        for (let i = 0; i < batchSize && index < data.length; i++, index++) {
+        for(
+            let i = 0;
+            i < batchSize && index < data.length;
+            i++, index++
+        ){
+
             const item = data[index];
+
             const row = document.createElement('tr');
 
             row.innerHTML = `
-                <td class="td-name">${escapeHtml(item.name)}</td>
-                <td class="td-branch">${escapeHtml(item.branch || '-')}</td>
-                <td class="td-zip">${escapeHtml(item.zip || '-')}</td>
-                <td class="td-address">${escapeHtml(item.address)}</td>
+
+                <td class="td-name">
+
+                    <a
+                        href="https://map.naver.com/p/search/${encodeURIComponent(item.name)}"
+                        target="_blank"
+                    >
+                        ${escapeHtml(item.name)}
+                    </a>
+
+                </td>
+
+                <td class="td-branch">
+                    ${escapeHtml(item.branch || '-')}
+                </td>
+
+                <td class="td-zip">
+                    ${escapeHtml(item.zip || '-')}
+                </td>
+
+                <td class="address-cell">
+                    ${escapeHtml(item.address)}
+                </td>
+
             `;
 
             fragment.appendChild(row);
+
         }
 
         tableBody.appendChild(fragment);
 
-        if (index < data.length) {
+        if(index < data.length){
+
             requestAnimationFrame(renderBatch);
+
         }
+
     }
 
     renderBatch();
+
 }
 
-function escapeHtml(text) {
+function escapeHtml(text){
+
     return String(text)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
+
 }
+
 </script>
 
 </body>
