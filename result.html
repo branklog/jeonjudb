@@ -1,131 +1,318 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>전주시 종합 상권 DB - 결과</title>
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; letter-spacing: -0.02em; }
-        body { background-color: #0b0b0b; color: #ffffff; padding: 60px 24px; display: flex; justify-content: center; }
-        .container { width: 100%; max-width: 1000px; }
-        .header-area { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1.5px solid #82F66F; }
-        h1 { font-size: 26px; font-weight: 700; color: #ffffff; }
-        .target-region { color: #82F66F; margin-right: 10px; }
-        .counter { font-size: 16px; color: #82F66F; font-weight: 400; }
-        .btn-back { font-size: 14px; color: #888888; text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.2s ease; }
-        .btn-back:hover { color: #82F66F; border-bottom: 1px solid #82F66F; }
-        
-        .table-wrapper { background: #121212; border-radius: 16px; padding: 12px; box-shadow: 0 4px 30px rgba(0,0,0,0.5); }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.5; }
-        th { padding: 18px 16px; text-align: left; font-weight: 600; color: #888888; background-color: #1a1a1a; font-size: 13px; position: sticky; top: 0; }
-        td { padding: 16px 16px; color: #cccccc; border-bottom: 1px solid #1f1f1f; }
-        tr:hover td { background-color: #1a1a1a; color: #ffffff; }
-        .td-name { font-weight: 600; color: #82F66F; }
-        .td-branch { color: #777; font-size: 13px; }
-        .td-zip { color: #82F66F; font-family: monospace; font-size: 15px; }
-        
-        /* 💡 8메가 전체 줄 스크롤 시 브라우저가 버벅이거나 하얗게 굳는 현상 완벽 방어 */
-        #result-table-body { content-visibility: auto; contain-intrinsic-size: 600px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>전주시 상권 DB 검색 결과</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Pretendard', sans-serif;
+}
+
+body {
+    background: #0b0b0b;
+    color: #fff;
+    padding: 40px 20px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.header-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #82F66F;
+    padding-bottom: 20px;
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.target-region {
+    color: #82F66F;
+}
+
+.counter {
+    display: block;
+    margin-top: 6px;
+    color: #82F66F;
+    font-size: 15px;
+}
+
+.btn-back {
+    color: #888;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.btn-back:hover {
+    color: #82F66F;
+}
+
+.search-box {
+    margin-bottom: 20px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid #222;
+    background: #121212;
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+}
+
+.search-box input:focus {
+    border-color: #82F66F;
+}
+
+.table-wrapper {
+    background: #121212;
+    border-radius: 16px;
+    overflow-x: auto;
+    padding: 12px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+th {
+    background: #1a1a1a;
+    color: #888;
+    font-size: 13px;
+    text-align: left;
+    padding: 16px;
+    position: sticky;
+    top: 0;
+}
+
+td {
+    padding: 16px;
+    border-bottom: 1px solid #1f1f1f;
+    color: #ccc;
+}
+
+tr:hover td {
+    background: #1a1a1a;
+    color: #fff;
+}
+
+.td-name {
+    color: #82F66F;
+    font-weight: 600;
+}
+
+.td-branch {
+    color: #777;
+}
+
+.td-zip {
+    color: #82F66F;
+    font-family: monospace;
+}
+
+.empty-message {
+    text-align: center;
+    padding: 40px;
+    color: #888;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 24px 12px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    table {
+        min-width: 700px;
+    }
+}
+</style>
 </head>
 <body>
 
 <div class="container">
+
     <div class="header-area">
-        <h1>전주시 <span class="target-region" id="region-title">구</span>상권 DB <span class="counter" id="total-count">데이터 동기화 중...</span></h1>
+        <div>
+            <h1>
+                전주시 <span class="target-region" id="region-title"></span> 상권 DB
+            </h1>
+            <span class="counter" id="total-count">데이터 불러오는 중...</span>
+        </div>
         <a href="index.html" class="btn-back">← 뒤로가기</a>
+    </div>
+
+    <div class="search-box">
+        <input type="text" id="search-input" placeholder="상호명을 입력하세요">
     </div>
 
     <div class="table-wrapper">
         <table>
             <thead>
                 <tr>
-                    <th style="width: 30%; border-radius: 8px 0 0 8px;">상호명</th>
-                    <th style="width: 15%;">지점명</th>
-                    <th style="width: 15%;">우편번호</th>
-                    <th style="width: 40%; border-radius: 0 8px 8px 0;">상세 주소</th>
+                    <th>상호명</th>
+                    <th>지점명</th>
+                    <th>우편번호</th>
+                    <th>도로명주소</th>
                 </tr>
             </thead>
             <tbody id="result-table-body"></tbody>
         </table>
     </div>
+
 </div>
 
 <script>
-    window.onload = function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const selectedRegion = urlParams.get('region') || "완산구";
-        document.getElementById('region-title').textContent = selectedRegion + " ";
+let allData = [];
+let filteredData = [];
 
-        loadJsonDatabase(selectedRegion);
+window.onload = function () {
+    const params = new URLSearchParams(window.location.search);
+    const region = params.get('region') || '완산구';
+
+    document.getElementById('region-title').textContent = region;
+
+    loadData(region);
+
+    document.getElementById('search-input').addEventListener('input', function () {
+        const keyword = this.value.trim().toLowerCase();
+
+        filteredData = allData.filter(item =>
+            item.name.toLowerCase().includes(keyword)
+        );
+
+        renderTable(filteredData);
+    });
+};
+
+async function loadData(region) {
+    const tableBody = document.getElementById('result-table-body');
+    const totalCountEl = document.getElementById('total-count');
+
+    try {
+        const response = await fetch('./data.json?v=' + Date.now());
+        if (!response.ok) throw new Error('JSON 로드 실패');
+
+        const rawData = await response.json();
+
+        allData = rawData
+            .filter(item =>
+                (item["시군구명"] || '').includes(region) ||
+                (item["도로명주소"] || '').includes(region)
+            )
+            .map(item => ({
+                name: item["상호명"] || '',
+                branch: item["지점명"] || '',
+                zip: item["신우편번호"] || '',
+                address: item["도로명주소"] || ''
+            }))
+            .sort((a, b) => a.name.localeCompare(b.name, 'ko'));
+
+        filteredData = [...allData];
+
+        totalCountEl.textContent =
+            `총 ${allData.length.toLocaleString()}건 조회됨`;
+
+        renderTable(filteredData);
+
+    } catch (error) {
+        console.error(error);
+        totalCountEl.textContent = '데이터 로드 실패';
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="4" class="empty-message">
+                    data.json 파일을 확인해주세요.
+                </td>
+            </tr>
+        `;
+    }
+}
+
+function renderTable(data) {
+    const tableBody = document.getElementById('result-table-body');
+    const totalCountEl = document.getElementById('total-count');
+
+    totalCountEl.textContent =
+        `총 ${data.length.toLocaleString()}건 조회됨`;
+
+    if (data.length === 0) {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="4" class="empty-message">
+                    검색 결과가 없습니다.
+                </td>
+            </tr>
+        `;
+        return;
     }
 
-    async function loadJsonDatabase(district) {
-        const tableBody = document.getElementById('result-table-body');
-        const totalCountEl = document.getElementById('total-count');
+    tableBody.innerHTML = '';
 
-        try {
-            // 디자이너님이 만드신 data.json 파일을 캐시 없이 실시간 호출합니다.
-            const response = await fetch('./data.json?v=' + Date.now());
-            if (!response.ok) throw new Error("data.json 로드 실패");
-            
-            const rawData = await response.json();
-            const filteredData = [];
+    const batchSize = 500;
+    let index = 0;
 
-            let len = rawData.length;
-            for (let i = 0; i < len; i++) {
-                let item = rawData[i];
-                
-                let currentCity = item["시군구명"] || "";
-                let currentAddr = item["도로명주소"] || "";
+    function renderBatch() {
+        const fragment = document.createDocumentFragment();
 
-                // 전주시 완산구, 전주시 덕진구 글자가 포함되어 있는지 정확하게 필터링
-                if (currentCity.includes(district) || currentAddr.includes(district)) {
-                    filteredData.push({
-                        name: item["상호명"] || "",
-                        branch: item["지점명"] || "",
-                        address: currentAddr,
-                        zip: item["신우편번호"] || ""
-                    });
-                }
-            }
+        for (
+            let i = 0;
+            i < batchSize && index < data.length;
+            i++, index++
+        ) {
+            const item = data[index];
+            const row = document.createElement('tr');
 
-            // 상호명 기준 가나다순 오름차순 정렬
-            filteredData.sort((a, b) => a.name.localeCompare(b.name));
-            totalCountEl.textContent = `총 ${filteredData.length.toLocaleString()}건 동기화 완료`;
+            row.innerHTML = `
+                <td class="td-name">${escapeHtml(item.name)}</td>
+                <td class="td-branch">${escapeHtml(item.branch || '-')}</td>
+                <td class="td-zip">${escapeHtml(item.zip || '-')}</td>
+                <td>${escapeHtml(item.address)}</td>
+            `;
 
-            if (filteredData.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:40px; color:#888;">${district} 데이터를 찾을 수 없습니다.</td></tr>`;
-                return;
-            }
-            
-            // 메모리 과부하를 막고 화면을 엄청 부드럽게 띄워주는 최적화 기법
-            const fragment = document.createDocumentFragment();
-            let filteredLen = filteredData.length;
-            for (let j = 0; j < filteredLen; j++) {
-                let item = filteredData[j];
-                if (item.name) {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td class="td-name">${item.name}</td>
-                        <td class="td-branch">${item.branch || "-"}</td>
-                        <td class="td-zip">${item.zip || "-"}</td>
-                        <td>${item.address}</td>
-                    `;
-                    fragment.appendChild(row);
-                }
-            }
-            
-            tableBody.innerHTML = ''; 
-            tableBody.appendChild(fragment);
+            fragment.appendChild(row);
+        }
 
-        } catch (error) {
-            console.error(error);
-            totalCountEl.textContent = "연동 실패";
-            tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:40px; color:#ff6b6b;">⚠️ 데이터 연동 실패. 깃허브 저장소에 data.json 파일이 올라가 있는지 확인해 주세요.</td></tr>`;
+        tableBody.appendChild(fragment);
+
+        if (index < data.length) {
+            requestAnimationFrame(renderBatch);
         }
     }
+
+    renderBatch();
+}
+
+function escapeHtml(text) {
+    return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
 </script>
+
 </body>
 </html>
