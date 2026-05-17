@@ -102,12 +102,14 @@ th {
     padding: 16px;
     position: sticky;
     top: 0;
+    z-index: 10;
 }
 
 td {
     padding: 16px;
     border-bottom: 1px solid #1f1f1f;
     color: #ccc;
+    vertical-align: top;
 }
 
 tr:hover td {
@@ -135,6 +137,7 @@ tr:hover td {
     color: #888;
 }
 
+/* 모바일 최적화 */
 @media (max-width: 768px) {
     body {
         padding: 24px 12px;
@@ -146,6 +149,17 @@ tr:hover td {
 
     table {
         min-width: 700px;
+    }
+
+    /* 모바일에서 주소는 최대 2줄까지만 표시 */
+    td:last-child {
+        max-width: 180px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        line-height: 1.5;
+        word-break: break-word;
     }
 }
 </style>
@@ -276,11 +290,7 @@ function renderTable(data) {
     function renderBatch() {
         const fragment = document.createDocumentFragment();
 
-        for (
-            let i = 0;
-            i < batchSize && index < data.length;
-            i++, index++
-        ) {
+        for (let i = 0; i < batchSize && index < data.length; i++, index++) {
             const item = data[index];
             const row = document.createElement('tr');
 
@@ -288,7 +298,9 @@ function renderTable(data) {
                 <td class="td-name">${escapeHtml(item.name)}</td>
                 <td class="td-branch">${escapeHtml(item.branch || '-')}</td>
                 <td class="td-zip">${escapeHtml(item.zip || '-')}</td>
-                <td>${escapeHtml(item.address)}</td>
+                <td title="${escapeHtml(item.address)}">
+                    ${escapeHtml(item.address)}
+                </td>
             `;
 
             fragment.appendChild(row);
