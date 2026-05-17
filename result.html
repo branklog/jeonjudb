@@ -316,6 +316,7 @@ tr:hover td{
 <script>
 
 let allData = [];
+let regionData = [];
 let filteredData = [];
 
 window.onload = function(){
@@ -340,25 +341,14 @@ window.onload = function(){
 
         if(keyword === ''){
 
-            filteredData =
-            allData.filter(item => {
-
-                return (
-
-                    item.city.includes(region) ||
-
-                    item.address.includes(region)
-
-                );
-
-            });
+            filteredData = [...regionData];
 
         }
 
         else{
 
             filteredData =
-            allData.filter(item => {
+            regionData.filter(item => {
 
                 const name =
                 String(item.name || '')
@@ -425,7 +415,7 @@ async function loadData(region){
 
         }));
 
-        filteredData =
+        regionData =
         allData.filter(item => {
 
             return (
@@ -437,6 +427,8 @@ async function loadData(region){
             );
 
         });
+
+        filteredData = [...regionData];
 
         totalCountEl.textContent =
         `총 ${filteredData.length.toLocaleString()}건 조회됨`;
