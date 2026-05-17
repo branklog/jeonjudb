@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전주 전화번호 DB - 홈</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Malgun Gothic', sans-serif; }
+        body {
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 50px 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+        h1 {
+            font-size: 26px;
+            margin-bottom: 30px;
+            color: #222;
+        }
+        .btn-db {
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+        .btn-db:hover {
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>전주 전화번호 DB</h1>
+    <!-- 버튼을 누르면 result.html로 이동하되, 주소창에 ?query=jeonju를 붙여서 넘깁니다 -->
+    <button class="btn-db" onclick="location.href='result.html?query=jeonju'">전주 전화번호 DB 조회하기</button>
+</div>
+
+</body>
+</html>
