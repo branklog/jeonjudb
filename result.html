@@ -102,12 +102,14 @@ th {
     padding: 16px;
     position: sticky;
     top: 0;
+    z-index: 1;
 }
 
 td {
     padding: 16px;
     border-bottom: 1px solid #1f1f1f;
     color: #ccc;
+    vertical-align: top;
 }
 
 tr:hover td {
@@ -129,12 +131,21 @@ tr:hover td {
     font-family: monospace;
 }
 
+/* 주소 줄바꿈 처리 */
+.td-address {
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.6;
+    min-width: 260px;
+}
+
 .empty-message {
     text-align: center;
     padding: 40px;
     color: #888;
 }
 
+/* 모바일 최적화 */
 @media (max-width: 768px) {
     body {
         padding: 24px 12px;
@@ -144,8 +155,46 @@ tr:hover td {
         font-size: 22px;
     }
 
+    .table-wrapper {
+        padding: 8px;
+    }
+
     table {
-        min-width: 700px;
+        min-width: 100%;
+        table-layout: fixed;
+    }
+
+    th, td {
+        padding: 12px 10px;
+        font-size: 13px;
+    }
+
+    /* 컬럼 너비 비율 */
+    th:nth-child(1),
+    td:nth-child(1) {
+        width: 22%;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+        width: 14%;
+    }
+
+    th:nth-child(3),
+    td:nth-child(3) {
+        width: 18%;
+    }
+
+    th:nth-child(4),
+    td:nth-child(4) {
+        width: 46%;
+    }
+
+    .td-address {
+        white-space: normal;
+        word-break: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.5;
     }
 }
 </style>
@@ -288,7 +337,7 @@ function renderTable(data) {
                 <td class="td-name">${escapeHtml(item.name)}</td>
                 <td class="td-branch">${escapeHtml(item.branch || '-')}</td>
                 <td class="td-zip">${escapeHtml(item.zip || '-')}</td>
-                <td>${escapeHtml(item.address)}</td>
+                <td class="td-address">${escapeHtml(item.address)}</td>
             `;
 
             fragment.appendChild(row);
