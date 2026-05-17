@@ -15,7 +15,6 @@
         }
         
         body {
-            /* 깊고 매트한 블랙 배경 */
             background-color: #0b0b0b;
             color: #ffffff;
             display: flex;
@@ -32,33 +31,45 @@
             animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* 📞 디자이너 감성의 미니멀 네온 그린 전화기 아이콘 (CSS 수작업 마감) */
-        .phone-icon-wrapper {
-            display: inline-block;
-            width: 48px;
-            height: 48px;
+        /* 📞 촌스러운 원형 심볼을 완벽히 걷어낸 미니멀 라인 전화기 아이콘 */
+        .phone-icon-box {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 64px;
+            height: 64px;
             margin-bottom: 24px;
-            position: relative;
         }
-        .phone-icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
+        
+        /* CSS로 정교하게 드로잉한 네온 그린 수화기 선 */
+        .phone-line {
             width: 24px;
             height: 24px;
-            border: 2.5px solid #82F66F;
-            border-radius: 6px;
-            transform: translate(-50%, -50%) rotate(-35deg);
+            border-left: 3px solid #82F66F;
+            border-bottom: 3px solid #82F66F;
+            border-radius: 0 0 0 12px;
+            transform: rotate(-45deg);
+            position: relative;
         }
-        .phone-icon::before {
+        .phone-line::before, .phone-line::after {
             content: '';
             position: absolute;
-            top: 4px;
-            left: 4px;
-            width: 4px;
-            height: 10px;
-            border-left: 2.5px solid #82F66F;
+            background-color: #82F66F;
             border-radius: 2px;
+        }
+        /* 위쪽 수화기 귀 부분 */
+        .phone-line::before {
+            width: 10px;
+            height: 5px;
+            top: -5px;
+            left: -3px;
+        }
+        /* 아래쪽 수화기 입 부분 */
+        .phone-line::after {
+            width: 5px;
+            height: 10px;
+            bottom: -3px;
+            right: -5px;
         }
 
         h1 {
@@ -77,30 +88,26 @@
             font-weight: 400;
         }
 
-        /* 크몽 무드의 네온 그린 배경 + 블랙 텍스트 버튼 */
+        /* 크몽 무드의 네온 그린 배경 + 블랙 텍스트 버튼 (a 태그 스타일 최적화) */
         .btn-enter {
             display: block;
             width: 100%;
             background-color: #82F66F;
             color: #000000;
-            border: none;
+            text-decoration: none;
             padding: 20px 0;
             font-size: 16px;
             font-weight: 700;
-            border-radius: 20px; /* 부드러운 라운드 코너 */
-            cursor: pointer;
+            border-radius: 20px;
             box-shadow: 0 8px 24px rgba(130, 246, 111, 0.15);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
         }
 
         .btn-enter:hover {
             background-color: #9aff8c;
             transform: translateY(-2px);
             box-shadow: 0 12px 32px rgba(130, 246, 111, 0.3);
-        }
-
-        .btn-enter:active {
-            transform: translateY(0);
         }
 
         .footer {
@@ -119,29 +126,17 @@
 <body>
 
 <div class="main-wrapper">
-    <div class="phone-icon-wrapper">
-        <div class="phone-icon"></div>
+    <div class="phone-icon-box">
+        <div class="phone-line"></div>
     </div>
     
     <h1>전주 전화번호 DB</h1>
     <p class="subtitle">실시간 데이터 연동<br>전주 지역 데이터 아카이브</p>
     
-    <button class="btn-enter" onclick="navigateToResult()">데이터베이스 조회하기</button>
+    <a href="result.html" class="btn-enter">데이터베이스 조회하기</a>
     
     <div class="footer">© 2026 JEONJU DB ARCHIVE.</div>
 </div>
 
-<script>
-    function navigateToResult() {
-        // 🛠️ [404 에러 완전 해결 우회 스크립트]
-        // 현재 브라우저 주소창에서 파일명만 정확히 떼어내고 'result.html'을 붙여주는 브라우저 정석 연동 방식입니다.
-        var href = window.location.href;
-        var lastSlash = href.lastIndexOf('/');
-        var basePath = href.substring(0, lastSlash + 1);
-        
-        // 무조건 동일 리포지토리 폴더 안의 result.html로 강제 매핑하여 이동시킵니다.
-        window.location.href = basePath + "result.html";
-    }
-</script>
 </body>
 </html>
