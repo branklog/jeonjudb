@@ -3,142 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>전주 전화번호 DB - 조회 결과</title>
+    <title>전주 전화번호 DB</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Pretendard', sans-serif;
-            letter-spacing: -0.02em;
-        }
-        body {
-            /* 인덱스와 통일한 매트 블랙 배경 */
-            background-color: #0b0b0b;
-            color: #ffffff;
-            padding: 60px 24px;
-            display: flex;
-            justify-content: center;
-        }
-        .container {
-            width: 100%;
-            max-width: 1000px;
-            animation: fadeIn 0.5s ease-out;
-        }
-        .header-area {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            /* 네온 그린 라인 포인트 */
-            border-bottom: 1.5px solid #82F66F;
-        }
-        h1 {
-            font-size: 26px;
-            font-weight: 700;
-            color: #ffffff;
-        }
-        .btn-back {
-            font-size: 14px;
-            color: #888888;
-            text-decoration: none;
-            padding: 6px 0;
-            border-bottom: 1px solid transparent;
-            transition: all 0.2s ease;
-        }
-        .btn-back:hover {
-            color: #82F66F;
-            border-bottom: 1px solid #82F66F;
-        }
-        .table-wrapper {
-            background: #121212;
-            border-radius: 16px;
-            padding: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-        th, td {
-            padding: 18px 16px;
-            text-align: left;
-        }
-        th {
-            font-weight: 600;
-            color: #888888;
-            background-color: #1a1a1a;
-            font-size: 13px;
-        }
-        td {
-            color: #cccccc;
-            border-bottom: 1px solid #1f1f1f;
-        }
-        tr:hover td {
-            background-color: #1a1a1a;
-            color: #ffffff;
-        }
-        .td-name {
-            font-weight: 600;
-            color: #82F66F; /* 상호명에 네온 그린 강조 */
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; letter-spacing: -0.03em; }
+        body { background-color: #0b0b0b; color: #ffffff; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 24px; }
+        .main-wrapper { text-align: center; width: 100%; max-width: 420px; animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        .symbol-icon { display: inline-block; width: 32px; height: 32px; margin-bottom: 24px; border: 2px solid #82F66F; border-radius: 50%; position: relative; }
+        .symbol-icon::before { content: ''; position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; border-left: 2px solid #82F66F; border-bottom: 2px solid #82F66F; transform: translate(-30%, -65%) rotate(-45deg); }
+        h1 { font-size: 32px; font-weight: 700; line-height: 1.2; margin-bottom: 12px; }
+        .subtitle { font-size: 15px; color: #888888; margin-bottom: 56px; line-height: 1.6; }
+        .btn-enter { display: block; width: 100%; background-color: #82F66F; color: #000000; border: none; padding: 20px 0; font-size: 16px; font-weight: 700; border-radius: 20px; cursor: pointer; box-shadow: 0 8px 24px rgba(130, 246, 111, 0.15); transition: all 0.3s ease; }
+        .btn-enter:hover { background-color: #9aff8c; transform: translateY(-2px); box-shadow: 0 12px 32px rgba(130, 246, 111, 0.3); }
+        .footer { margin-top: 80px; font-size: 11px; color: #444444; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header-area">
-        <h1>조회 결과</h1>
-        <a href="./" class="btn-back">← 처음으로</a>
-    </div>
-
-    <div class="table-wrapper">
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 22%; border-radius: 8px 0 0 8px;">상호명</th>
-                    <th style="width: 18%;">전화번호</th>
-                    <th style="width: 35%;">주소</th>
-                    <th style="width: 25%; border-radius: 0 8px 8px 0;">블로그명</th>
-                </tr>
-            </thead>
-            <tbody id="result-table-body">
-                </tbody>
-        </table>
-    </div>
+<div class="main-wrapper">
+    <div class="symbol-icon"></div>
+    <h1>전주 전화번호 DB</h1>
+    <p class="subtitle">실시간 데이터 연동<br>전주 지역 데이터 아카이브</p>
+    <button class="btn-enter" onclick="navigateToResult()">데이터베이스 조회하기</button>
+    <div class="footer">© 2026 JEONJU DB ARCHIVE.</div>
 </div>
 
 <script>
-    // 기존과 동일한 데이터셋
-    const dynamicDB = [
-        { name: "전주 한옥베이커리", phone: "063-123-4567", address: "전북 전주시 완산구 한옥마을길 12", blog: "한옥마을 맛집 탐방기" },
-        { name: "객리단길 커피하우스", phone: "063-987-6543", address: "전북 전주시 완산구 객사길 85", blog: "카페 투어 매니아" },
-        { name: "신시가지 IT 솔루션", phone: "063-456-7890", address: "전북 전주시 완산구 홍산로 23", blog: "테크 리뷰 일지" },
-        { name: "덕진공원 비빔밥", phone: "063-222-3333", address: "전북 전주시 덕진구 권삼득로 150", blog: "전주 로컬 맛집 가이드" }
-    ];
-
-    window.onload = function() {
-        const tableBody = document.getElementById('result-table-body');
-        
-        dynamicDB.forEach(item => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td class="td-name">${item.name}</td>
-                <td>${item.phone}</td>
-                <td>${item.address}</td>
-                <td>${item.blog}</td>
-            `;
-            tableBody.appendChild(row);
-        });
+    function navigateToResult() {
+        const currentPath = window.location.pathname;
+        if (currentPath.endsWith('/')) {
+            window.location.href = currentPath + 'result.html';
+        } else {
+            const parts = currentPath.split('/');
+            parts[parts.length - 1] = 'result.html';
+            window.location.href = parts.join('/');
+        }
     }
 </script>
 </body>
