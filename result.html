@@ -30,7 +30,7 @@
 
 <div class="container">
     <div class="header-area">
-        <h1><span class="target-region" id="region-title">지역</span>상권 DB <span class="counter" id="total-count">고속 데이터 매칭 중...</span></h1>
+        <h1><span class="target-region" id="region-title">지역</span>상권 DB <span class="counter" id="total-count">전체 파일 스캔 중...</span></h1>
         <a href="index.html" class="btn-back">← 다시 선택하기</a>
     </div>
 
@@ -50,26 +50,31 @@
 </div>
 
 <script>
-    // 🗜️ 원본 텍스트 파일 데이터 세트를 고밀도 문자열 묶음으로 임베딩했습니다.
-    const embeddedRawText = "상호명\t지점명\t시군구명\t도로명주소\t신우편번호\n오스포츠샵\t\t군산시\t전북특별자치도 군산시 옥서면 신장원길 15\t54170\n렛츠코딩앤플레이\t\t완주군\t전북특별자치도 완주군 이서면 출판로 46-5\t55365\n성일리츠\t\t익산시\t전북특별자치도 익산시 무왕로 1062\t54637\n쌍용타이어\t\t부안군\t전북특별자치도 부안군 행안면 행안중앙로 8\t56319\n법인버섯천지\t\t부안군\t전북특별자치도 부안군 보안면 부안로 1182-12\t56329\n노는언니\t\t부안군\t전북특별자치도 부안군 부안읍 시장길 29\t56308\n스카이유통클린\t\t김제시\t전북특별자치도 김제시 동서로 153\t54390\n이모네화훼.묘목농장\t\t익산시\t전북특별자치도 익산시 금마면 미륵사지로 51\t54573\n썸\t\t완주군\t전북특별자치도 완주군 상관면 왜목로 726-8\t55359\n디디네일\t\t부안군\t전북특별자치도 부안군 부안읍 부풍로 43-1\t56308\n현아가맥\t\t전주시 완산구\t전북특별자치도 전주시 완산구 서신천변13길 4-6\t54951\n초원식당\t\t익산시\t전북특별자치도 익산시 인북로11길 7\t54619\n진명모터스\t\t익산시\t전북특별자치도 익산시 익산대로 341\t54651\n수영이네반찬\t\t익산시\t전북특별자치도 익산시 인북로 259\t54619\n마음톡 심리상담센터\t\t익산시\t전북특별자치도 익산시 선화로17길 28\t54656\n카페사밀\t\t군산시\t전북특별자치도 군산시 구암31로 30\t54038\n정심\t\t장수군\t전북특별자치도 장수군 장계면 한들로 79\t55612\n오토크루(autocrew)\t\t전주시 덕진구\t전북특별자치도 전주시 덕진구 용정길 21\t54857\n부안마케팅영농조합법인\t\t부안군\t전북특별자치도 부안군 동진면 순환남로 802\t56317\n김수연원목공방 (gallery)\t\t군산시\t전북특별자치도 군산시 팔마로 97-1\t54121";
-
     window.onload = function() {
         const urlParams = new URLSearchParams(window.location.search);
         const selectedRegion = urlParams.get('region') || "전주시";
         document.getElementById('region-title').textContent = selectedRegion + " ";
 
-        renderEmbeddedData(selectedRegion);
+        loadRealRawFile(selectedRegion);
     }
 
-    function renderEmbeddedData(region) {
+    async function loadRealRawFile(region) {
         const tableBody = document.getElementById('result-table-body');
         const totalCountEl = document.getElementById('total-count');
 
         try {
-            const lines = embeddedRawText.split('\n');
+            // 🛑 경로 인식을 확실하게 하기 위해 최상위 주소 기호(./)를 적용해 파일을 호출합니다.
+            const response = await fetch('./소상공인시장진흥공단_상가(상권)정보_전북_202603.txt');
+            if (!response.ok) throw new Error("파일 로드 실패");
+            
+            // 한글이 깨지지 않도록 한국어 인코딩 표준 표준 디코더 적용
+            const arrayBuffer = await response.arrayBuffer();
+            const decoder = new TextDecoder('euc-kr');
+            const rawText = decoder.decode(arrayBuffer);
+
+            const lines = rawText.split(/\r?\n/);
             const filteredData = [];
 
-            // 실시간 인메모리 필터 처리
             for (let i = 1; i < lines.length; i++) {
                 const line = lines[i].trim();
                 if (!line) continue;
@@ -80,6 +85,7 @@
                 const currentCity = columns[2] ? columns[2].trim() : "";
                 const currentAddr = columns[3] ? columns[3].trim() : "";
 
+                // 입력된 지역 데이터만 실시간 스크리닝
                 if (currentCity.includes(region) || currentAddr.includes(region)) {
                     filteredData.push({
                         name: columns[0] ? columns[0].trim() : "",
@@ -90,9 +96,9 @@
                 }
             }
 
-            // 가나다순 정렬
+            // 가나다순으로 정밀 정렬
             filteredData.sort((a, b) => a.name.localeCompare(b.name));
-            totalCountEl.textContent = `총 ${filteredData.length.toLocaleString()}건 데이터 실시간 로드 완료`;
+            totalCountEl.textContent = `총 ${filteredData.length.toLocaleString()}건 정렬 완료`;
             
             const fragment = document.createDocumentFragment();
             filteredData.forEach(item => {
@@ -113,8 +119,8 @@
 
         } catch (error) {
             console.error(error);
-            totalCountEl.textContent = "빌드 실패";
-            tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:40px; color:#ff6b6b;">⚠️ 데이터 가공 중 에러가 발생했습니다.</td></tr>`;
+            totalCountEl.textContent = "연동 실패";
+            tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:40px; color:#ff6b6b;">⚠️ 원본 텍스트 파일 로드 실패. 파일이 result.html과 같은 위치에 업로드되어 있는지 확인해 주세요.</td></tr>`;
         }
     }
 </script>
