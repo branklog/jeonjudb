@@ -11,11 +11,10 @@
             margin: 0;
             padding: 0;
             font-family: 'Pretendard', sans-serif;
-            letter-spacing: -0.04em; /* 글자 간격을 조금 더 좁혀서 단단한 느낌을 줌 */
+            letter-spacing: -0.04em;
         }
         
         body {
-            /* 깊고 매트한 블랙 배경 */
             background-color: #0b0b0b;
             color: #ffffff;
             display: flex;
@@ -49,7 +48,7 @@
             font-weight: 400;
         }
 
-        /* 크몽 무드의 네온 그린 배경 + 블랙 텍스트 버튼 (a 태그 스타일 최적화) */
+        /* 크몽 무드의 네온 그린 배경 + 블랙 텍스트 버튼 */
         .btn-enter {
             display: block;
             width: 100%;
@@ -59,9 +58,10 @@
             padding: 20px 0;
             font-size: 16px;
             font-weight: 700;
-            border-radius: 20px; /* 라운드 코너 */
+            border-radius: 20px;
             box-shadow: 0 8px 24px rgba(130, 246, 111, 0.12);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            text-align: center;
             cursor: pointer;
         }
 
@@ -69,10 +69,6 @@
             background-color: #9aff8c;
             transform: translateY(-2px);
             box-shadow: 0 12px 32px rgba(130, 246, 111, 0.25);
-        }
-
-        .btn-enter:active {
-            transform: translateY(0);
         }
 
         .footer {
@@ -94,7 +90,7 @@
     <h1>전주 전화번호 DB</h1>
     <p class="subtitle">실시간 데이터 연동<br>전주 지역 데이터 아카이브</p>
     
-    <a href="result.html" class="btn-enter">데이터베이스 조회하기</a>
+    <a href="https://branklog.github.io/jeonjudb/result.html" class="btn-enter">데이터베이스 조회하기</a>
     
     <div class="footer">© 2026 JEONJU DB ARCHIVE.</div>
 </div>
