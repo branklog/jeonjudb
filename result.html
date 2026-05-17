@@ -131,12 +131,11 @@ tr:hover td {
     font-family: monospace;
 }
 
-/* 주소 줄바꿈 처리 */
 .td-address {
     white-space: normal;
     word-break: break-word;
+    overflow-wrap: break-word;
     line-height: 1.6;
-    min-width: 260px;
 }
 
 .empty-message {
@@ -164,12 +163,12 @@ tr:hover td {
         table-layout: fixed;
     }
 
-    th, td {
+    th,
+    td {
         padding: 12px 10px;
         font-size: 13px;
     }
 
-    /* 컬럼 너비 비율 */
     th:nth-child(1),
     td:nth-child(1) {
         width: 22%;
@@ -214,7 +213,11 @@ tr:hover td {
     </div>
 
     <div class="search-box">
-        <input type="text" id="search-input" placeholder="상호명을 입력하세요">
+        <input
+            type="text"
+            id="search-input"
+            placeholder="상호명, 지점명, 주소로 검색하세요"
+        >
     </div>
 
     <div class="table-wrapper">
@@ -245,12 +248,28 @@ window.onload = function () {
 
     loadData(region);
 
-    document.getElementById('search-input').addEventListener('input', function () {
+    const searchInput = document.getElementById('search-input');
+
+    searchInput.addEventListener('input', function () {
         const keyword = this.value.trim().toLowerCase();
 
-        filteredData = allData.filter(item =>
-            item.name.toLowerCase().includes(keyword)
-        );
+        if (keyword === '') {
+            filteredData = [...allData];
+        } else {
+            filteredData = allData.filter(item => {
+                const name = (item.name || '').toLowerCase();
+                const branch = (item.branch || '').toLowerCase();
+                const address = (item.address || '').toLowerCase();
+                const zip = (item.zip || '').toLowerCase();
+
+                return (
+                    name.includes(keyword) ||
+                    branch.includes(keyword) ||
+                    address.includes(keyword) ||
+                    zip.includes(keyword)
+                );
+            });
+        }
 
         renderTable(filteredData);
     });
@@ -266,6 +285,7 @@ async function loadData(region) {
 
         const rawData = await response.json();
 
+        // 선택된 지역(완산구/덕진구) 데이터만 불러오기
         allData = rawData
             .filter(item =>
                 (item["시군구명"] || '').includes(region) ||
@@ -325,11 +345,7 @@ function renderTable(data) {
     function renderBatch() {
         const fragment = document.createDocumentFragment();
 
-        for (
-            let i = 0;
-            i < batchSize && index < data.length;
-            i++, index++
-        ) {
+        for (let i = 0; i < batchSize && index < data.length; i++, index++) {
             const item = data[index];
             const row = document.createElement('tr');
 
