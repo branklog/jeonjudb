@@ -1,148 +1,163 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>전북 상권 DB 검색 시스템</title>
+<title>전북 상권 DB 검색 시스템</title>
 
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"
-    />
+<link
+rel="stylesheet"
+href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"
+/>
 
-    <style>
+<style>
 
-        *{
-            box-sizing:border-box;
-            margin:0;
-            padding:0;
-            font-family:'Pretendard',sans-serif;
-            letter-spacing:-0.02em;
-        }
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:'Pretendard',sans-serif;
+    letter-spacing:-0.02em;
+}
 
-        body{
-            background:#0b0b0b;
-            color:#fff;
-            min-height:100vh;
+body{
+    background:#0b0b0b;
+    color:#fff;
 
-            display:flex;
-            align-items:center;
-            justify-content:center;
+    min-height:100vh;
 
-            padding:24px;
-        }
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-        .container{
-            width:100%;
-            max-width:1000px;
-            text-align:center;
-        }
+    padding:24px;
+}
 
-        h1{
-            font-size:34px;
-            font-weight:700;
-            margin-bottom:14px;
-            color:#82F66F;
-        }
+.container{
+    width:100%;
+    max-width:1000px;
+    text-align:center;
+}
 
-        .sub{
-            color:#8a8a8a;
-            font-size:15px;
-            line-height:1.7;
-            margin-bottom:42px;
-            word-break:keep-all;
-        }
+h1{
+    font-size:34px;
+    font-weight:700;
+    margin-bottom:14px;
+    color:#82F66F;
+}
 
-        .grid-container{
-            display:grid;
-            grid-template-columns:repeat(3, 1fr);
-            gap:18px;
-            width:100%;
-        }
+.sub{
+    color:#8a8a8a;
+    font-size:15px;
+    line-height:1.7;
+    margin-bottom:42px;
+    word-break:keep-all;
+}
 
-        .region-card{
+.grid-container{
 
-            background:#121212;
-            border:1px solid #222;
+    display:grid;
 
-            border-radius:18px;
+    grid-template-columns:
+    repeat(3, 1fr);
 
-            padding:30px 18px;
+    gap:18px;
 
-            text-decoration:none;
+    width:100%;
 
-            color:#ccc;
+}
 
-            display:flex;
-            flex-direction:column;
-            gap:8px;
+.region-card{
 
-            transition:all .2s ease;
+    background:#121212;
 
-        }
+    border:1px solid #222;
 
-        .region-card:hover{
+    border-radius:18px;
 
-            border-color:#82F66F;
+    padding:30px 18px;
 
-            color:#82F66F;
+    text-decoration:none;
 
-            transform:translateY(-4px);
+    color:#ccc;
 
-            background:#161616;
+    display:flex;
 
-            box-shadow:
-            0 8px 24px rgba(130,246,111,.15);
+    flex-direction:column;
 
-        }
+    gap:8px;
 
-        .region-title{
-            font-size:20px;
-            font-weight:700;
-        }
+    transition:all .2s ease;
 
-        .region-tag{
-            font-size:12px;
-            color:#666;
-            text-transform:uppercase;
-            font-family:monospace;
-        }
+}
 
-        .region-card:hover .region-tag{
-            color:rgba(130,246,111,.7);
-        }
+.region-card:hover{
 
-        @media (max-width:768px){
+    border-color:#82F66F;
 
-            body{
-                padding:18px;
-            }
+    color:#82F66F;
 
-            h1{
-                font-size:28px;
-            }
+    transform:translateY(-4px);
 
-            .sub{
-                font-size:14px;
-                line-height:1.6;
-            }
+    background:#161616;
 
-            .grid-container{
-                grid-template-columns:1fr 1fr;
-            }
+    box-shadow:
+    0 8px 24px rgba(130,246,111,.15);
 
-            .region-card{
-                padding:24px 14px;
-            }
+}
 
-            .region-title{
-                font-size:18px;
-            }
+.region-title{
+    font-size:20px;
+    font-weight:700;
+}
 
-        }
+.region-tag{
+    font-size:12px;
+    color:#666;
+    text-transform:uppercase;
+    font-family:monospace;
+}
 
-    </style>
+.region-card:hover .region-tag{
+    color:rgba(130,246,111,.7);
+}
+
+/* 모바일 */
+
+@media (max-width:768px){
+
+    body{
+        padding:18px;
+    }
+
+    h1{
+        font-size:28px;
+    }
+
+    .sub{
+        font-size:14px;
+        line-height:1.6;
+    }
+
+    .grid-container{
+
+        grid-template-columns:
+        1fr 1fr;
+
+    }
+
+    .region-card{
+        padding:24px 14px;
+    }
+
+    .region-title{
+        font-size:18px;
+    }
+
+}
+
+</style>
 </head>
 
 <body>
