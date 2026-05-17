@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>전주시 상권 DB 검색 시스템</title>
+    <title>전북 상권 DB 검색 시스템</title>
 
     <link
         rel="stylesheet"
@@ -35,7 +35,7 @@
 
         .container{
             width:100%;
-            max-width:620px;
+            max-width:1000px;
             text-align:center;
         }
 
@@ -56,8 +56,8 @@
 
         .grid-container{
             display:grid;
-            grid-template-columns:1fr 1fr;
-            gap:20px;
+            grid-template-columns:repeat(3, 1fr);
+            gap:18px;
             width:100%;
         }
 
@@ -68,7 +68,7 @@
 
             border-radius:18px;
 
-            padding:42px 20px;
+            padding:30px 18px;
 
             text-decoration:none;
 
@@ -76,7 +76,7 @@
 
             display:flex;
             flex-direction:column;
-            gap:10px;
+            gap:8px;
 
             transition:all .2s ease;
 
@@ -98,7 +98,7 @@
         }
 
         .region-title{
-            font-size:22px;
+            font-size:20px;
             font-weight:700;
         }
 
@@ -129,11 +129,15 @@
             }
 
             .grid-container{
-                grid-template-columns:1fr;
+                grid-template-columns:1fr 1fr;
             }
 
             .region-card{
-                padding:32px 18px;
+                padding:24px 14px;
+            }
+
+            .region-title{
+                font-size:18px;
             }
 
         }
@@ -146,42 +150,91 @@
 <div class="container">
 
     <h1>
-        전주시 상권 DB 검색 시스템
+        전북 상권 DB 검색 시스템
     </h1>
 
     <p class="sub">
         공공데이터포털 소상공인 종합정보파일을 기반으로 제작된<br>
-        전주시 상권 무료 조회 시스템입니다.<br><br>
+        전북 지역 상권 무료 조회 시스템입니다.<br><br>
 
-        조회하시려는 자치구를 선택해 주세요.
+        조회하시려는 지역을 선택해 주세요.
     </p>
 
     <div class="grid-container">
 
-        <a
-            href="result.html?region=완산구"
-            class="region-card"
-        >
-            <span class="region-title">
-                완산구
-            </span>
-
-            <span class="region-tag">
-                Wansan-gu
-            </span>
+        <a href="result.html?region=완산구" class="region-card">
+            <span class="region-title">전주 완산구</span>
+            <span class="region-tag">Wansan-gu</span>
         </a>
 
-        <a
-            href="result.html?region=덕진구"
-            class="region-card"
-        >
-            <span class="region-title">
-                덕진구
-            </span>
+        <a href="result.html?region=덕진구" class="region-card">
+            <span class="region-title">전주 덕진구</span>
+            <span class="region-tag">Deokjin-gu</span>
+        </a>
 
-            <span class="region-tag">
-                Deokjin-gu
-            </span>
+        <a href="result.html?region=군산시" class="region-card">
+            <span class="region-title">군산시</span>
+            <span class="region-tag">Gunsan-si</span>
+        </a>
+
+        <a href="result.html?region=익산시" class="region-card">
+            <span class="region-title">익산시</span>
+            <span class="region-tag">Iksan-si</span>
+        </a>
+
+        <a href="result.html?region=정읍시" class="region-card">
+            <span class="region-title">정읍시</span>
+            <span class="region-tag">Jeongeup-si</span>
+        </a>
+
+        <a href="result.html?region=남원시" class="region-card">
+            <span class="region-title">남원시</span>
+            <span class="region-tag">Namwon-si</span>
+        </a>
+
+        <a href="result.html?region=김제시" class="region-card">
+            <span class="region-title">김제시</span>
+            <span class="region-tag">Gimje-si</span>
+        </a>
+
+        <a href="result.html?region=완주군" class="region-card">
+            <span class="region-title">완주군</span>
+            <span class="region-tag">Wanju-gun</span>
+        </a>
+
+        <a href="result.html?region=진안군" class="region-card">
+            <span class="region-title">진안군</span>
+            <span class="region-tag">Jinan-gun</span>
+        </a>
+
+        <a href="result.html?region=무주군" class="region-card">
+            <span class="region-title">무주군</span>
+            <span class="region-tag">Muju-gun</span>
+        </a>
+
+        <a href="result.html?region=장수군" class="region-card">
+            <span class="region-title">장수군</span>
+            <span class="region-tag">Jangsu-gun</span>
+        </a>
+
+        <a href="result.html?region=임실군" class="region-card">
+            <span class="region-title">임실군</span>
+            <span class="region-tag">Imsil-gun</span>
+        </a>
+
+        <a href="result.html?region=순창군" class="region-card">
+            <span class="region-title">순창군</span>
+            <span class="region-tag">Sunchang-gun</span>
+        </a>
+
+        <a href="result.html?region=고창군" class="region-card">
+            <span class="region-title">고창군</span>
+            <span class="region-tag">Gochang-gun</span>
+        </a>
+
+        <a href="result.html?region=부안군" class="region-card">
+            <span class="region-title">부안군</span>
+            <span class="region-tag">Buan-gun</span>
         </a>
 
     </div>
