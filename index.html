@@ -11,10 +11,11 @@
             margin: 0;
             padding: 0;
             font-family: 'Pretendard', sans-serif;
-            letter-spacing: -0.03em;
+            letter-spacing: -0.04em; /* 글자 간격을 조금 더 좁혀서 단단한 느낌을 줌 */
         }
         
         body {
+            /* 깊고 매트한 블랙 배경 */
             background-color: #0b0b0b;
             color: #ffffff;
             display: flex;
@@ -27,63 +28,23 @@
         .main-wrapper {
             text-align: center;
             width: 100%;
-            max-width: 420px;
+            max-width: 400px;
             animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        /* 📞 촌스러운 원형 심볼을 완벽히 걷어낸 미니멀 라인 전화기 아이콘 */
-        .phone-icon-box {
-            display: inline-flex;
-            justify-content: center;
-            align-items: center;
-            width: 64px;
-            height: 64px;
-            margin-bottom: 24px;
-        }
-        
-        /* CSS로 정교하게 드로잉한 네온 그린 수화기 선 */
-        .phone-line {
-            width: 24px;
-            height: 24px;
-            border-left: 3px solid #82F66F;
-            border-bottom: 3px solid #82F66F;
-            border-radius: 0 0 0 12px;
-            transform: rotate(-45deg);
-            position: relative;
-        }
-        .phone-line::before, .phone-line::after {
-            content: '';
-            position: absolute;
-            background-color: #82F66F;
-            border-radius: 2px;
-        }
-        /* 위쪽 수화기 귀 부분 */
-        .phone-line::before {
-            width: 10px;
-            height: 5px;
-            top: -5px;
-            left: -3px;
-        }
-        /* 아래쪽 수화기 입 부분 */
-        .phone-line::after {
-            width: 5px;
-            height: 10px;
-            bottom: -3px;
-            right: -5px;
+            padding: 20px 0;
         }
 
         h1 {
-            font-size: 32px;
+            font-size: 34px;
             font-weight: 700;
             line-height: 1.2;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             color: #ffffff;
         }
 
         .subtitle {
             font-size: 15px;
             color: #888888;
-            margin-bottom: 56px;
+            margin-bottom: 64px;
             line-height: 1.6;
             font-weight: 400;
         }
@@ -98,8 +59,8 @@
             padding: 20px 0;
             font-size: 16px;
             font-weight: 700;
-            border-radius: 20px;
-            box-shadow: 0 8px 24px rgba(130, 246, 111, 0.15);
+            border-radius: 20px; /* 라운드 코너 */
+            box-shadow: 0 8px 24px rgba(130, 246, 111, 0.12);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             cursor: pointer;
         }
@@ -107,18 +68,22 @@
         .btn-enter:hover {
             background-color: #9aff8c;
             transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(130, 246, 111, 0.3);
+            box-shadow: 0 12px 32px rgba(130, 246, 111, 0.25);
+        }
+
+        .btn-enter:active {
+            transform: translateY(0);
         }
 
         .footer {
-            margin-top: 80px;
+            margin-top: 96px;
             font-size: 11px;
-            color: #444444;
+            color: #333333;
             font-weight: 400;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
     </style>
@@ -126,10 +91,6 @@
 <body>
 
 <div class="main-wrapper">
-    <div class="phone-icon-box">
-        <div class="phone-line"></div>
-    </div>
-    
     <h1>전주 전화번호 DB</h1>
     <p class="subtitle">실시간 데이터 연동<br>전주 지역 데이터 아카이브</p>
     
