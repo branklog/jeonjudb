@@ -37,11 +37,8 @@ body{
     align-items:flex-end;
     flex-wrap:wrap;
     gap:12px;
-
     margin-bottom:20px;
-
     border-bottom:1px solid #82F66F;
-
     padding-bottom:20px;
 }
 
@@ -76,23 +73,14 @@ h1{
 }
 
 .search-box input{
-
     width:100%;
-
     padding:14px 16px;
-
     border-radius:12px;
-
     border:1px solid #222;
-
     background:#121212;
-
     color:#fff;
-
     font-size:15px;
-
     outline:none;
-
 }
 
 .search-box input:focus{
@@ -100,15 +88,10 @@ h1{
 }
 
 .table-wrapper{
-
     background:#121212;
-
     border-radius:16px;
-
     overflow:auto;
-
     padding:12px;
-
 }
 
 table{
@@ -117,35 +100,21 @@ table{
 }
 
 th{
-
     background:#1a1a1a;
-
     color:#888;
-
     font-size:13px;
-
     text-align:left;
-
     padding:16px;
-
     position:sticky;
-
     top:0;
-
     z-index:5;
-
 }
 
 td{
-
     padding:16px;
-
     border-bottom:1px solid #1f1f1f;
-
     color:#ccc;
-
     vertical-align:top;
-
 }
 
 tr:hover td{
@@ -153,13 +122,9 @@ tr:hover td{
 }
 
 .td-name a{
-
     color:#82F66F;
-
     text-decoration:none;
-
     font-weight:600;
-
 }
 
 .td-name a:hover{
@@ -172,17 +137,11 @@ tr:hover td{
 }
 
 .address-cell{
-
     white-space:normal;
-
     line-height:1.6;
-
     word-break:break-word;
-
     cursor:pointer;
-
     transition:.2s;
-
 }
 
 .address-cell:hover{
@@ -190,16 +149,10 @@ tr:hover td{
 }
 
 .empty-message{
-
     text-align:center;
-
     padding:40px;
-
     color:#888;
-
 }
-
-/* 모바일 */
 
 @media (max-width:768px){
 
@@ -299,7 +252,7 @@ tr:hover td{
                     </th>
 
                     <th style="width:60%;">
-                        주소 (클릭 복사)
+                        주소
                     </th>
 
                 </tr>
@@ -508,76 +461,64 @@ function renderTable(data){
 
     tableBody.innerHTML = '';
 
-    const batchSize = 500;
+    const fragment =
+    document.createDocumentFragment();
 
-    let index = 0;
+    data.forEach(item => {
 
-    function renderBatch(){
+        const row =
+        document.createElement('tr');
 
-        const fragment =
-        document.createDocumentFragment();
+        row.innerHTML = `
 
-        for(
+            <td class="td-name">
 
-            let i = 0;
+                <a
+                href="https://map.naver.com/v5/search/${encodeURIComponent(item.name)}"
+                target="_blank">
 
-            i < batchSize &&
-            index < data.length;
+                    ${escapeHtml(item.name)}
 
-            i++, index++
+                </a>
 
-        ){
+            </td>
 
-            const item = data[index];
+            <td class="td-zip">
 
-            const row =
-            document.createElement('tr');
+                ${escapeHtml(item.zip || '-')}
 
-            row.innerHTML = `
+            </td>
 
-                <td class="td-name">
+            <td
+            class="address-cell"
+            data-address="${escapeHtml(item.address)}">
 
-                    <a
-                    href="https://search.naver.com/search.naver?query=${encodeURIComponent(item.name + ' 전화번호')}"
-                    target="_blank">
+                ${escapeHtml(item.address)}
 
-                        ${escapeHtml(item.name)}
+            </td>
 
-                    </a>
+        `;
 
-                </td>
+        fragment.appendChild(row);
 
-                <td class="td-zip">
+    });
 
-                    ${escapeHtml(item.zip || '-')}
+    tableBody.appendChild(fragment);
 
-                </td>
+    document.querySelectorAll('.address-cell')
 
-                <td
-                class="address-cell"
-                onclick="copyAddress('${escapeHtml(item.address)}')">
+    .forEach(cell => {
 
-                    ${escapeHtml(item.address)}
+        cell.addEventListener('click', function(){
 
-                </td>
+            const address =
+            this.dataset.address;
 
-            `;
+            copyAddress(address);
 
-            fragment.appendChild(row);
+        });
 
-        }
-
-        tableBody.appendChild(fragment);
-
-        if(index < data.length){
-
-            requestAnimationFrame(renderBatch);
-
-        }
-
-    }
-
-    renderBatch();
+    });
 
 }
 
