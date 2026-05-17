@@ -1,464 +1,245 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>전주시 상권 DB 검색 결과</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+    <title>전북 상권 DB 검색 시스템</title>
 
-<style>
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"
+    />
 
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-    font-family:'Pretendard',sans-serif;
-}
+    <style>
 
-body{
-    background:#0b0b0b;
-    color:#fff;
-    padding:40px 20px;
-}
+        *{
+            box-sizing:border-box;
+            margin:0;
+            padding:0;
+            font-family:'Pretendard',sans-serif;
+            letter-spacing:-0.02em;
+        }
 
-.container{
-    max-width:1200px;
-    margin:0 auto;
-}
+        body{
+            background:#0b0b0b;
+            color:#fff;
+            min-height:100vh;
 
-.header-area{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-end;
-    flex-wrap:wrap;
-    gap:12px;
-    margin-bottom:20px;
-    border-bottom:1px solid #82F66F;
-    padding-bottom:20px;
-}
+            display:flex;
+            align-items:center;
+            justify-content:center;
 
-h1{
-    font-size:28px;
-    font-weight:700;
-}
+            padding:24px;
+        }
 
-.target-region{
-    color:#82F66F;
-}
+        .container{
+            width:100%;
+            max-width:1000px;
+            text-align:center;
+        }
 
-.counter{
-    display:block;
-    margin-top:6px;
-    color:#82F66F;
-    font-size:15px;
-}
+        h1{
+            font-size:34px;
+            font-weight:700;
+            margin-bottom:14px;
+            color:#82F66F;
+        }
 
-.btn-back{
-    color:#888;
-    text-decoration:none;
-    font-size:14px;
-}
+        .sub{
+            color:#8a8a8a;
+            font-size:15px;
+            line-height:1.7;
+            margin-bottom:42px;
+            word-break:keep-all;
+        }
 
-.btn-back:hover{
-    color:#82F66F;
-}
+        .grid-container{
+            display:grid;
+            grid-template-columns:repeat(3, 1fr);
+            gap:18px;
+            width:100%;
+        }
 
-.search-box{
-    margin-bottom:20px;
-}
+        .region-card{
 
-.search-box input{
-    width:100%;
-    padding:14px 16px;
-    border-radius:12px;
-    border:1px solid #222;
-    background:#121212;
-    color:#fff;
-    font-size:15px;
-    outline:none;
-}
+            background:#121212;
+            border:1px solid #222;
 
-.search-box input:focus{
-    border-color:#82F66F;
-}
+            border-radius:18px;
 
-.table-wrapper{
-    background:#121212;
-    border-radius:16px;
-    overflow:auto;
-    padding:12px;
-}
+            padding:30px 18px;
 
-table{
-    width:100%;
-    border-collapse:collapse;
-}
+            text-decoration:none;
 
-th{
-    background:#1a1a1a;
-    color:#888;
-    font-size:13px;
-    text-align:left;
-    padding:16px;
-    position:sticky;
-    top:0;
-    z-index:5;
-}
+            color:#ccc;
 
-td{
-    padding:16px;
-    border-bottom:1px solid #1f1f1f;
-    color:#ccc;
-    vertical-align:top;
-}
+            display:flex;
+            flex-direction:column;
+            gap:8px;
 
-tr:hover td{
-    background:#1a1a1a;
-    color:#fff;
-}
+            transition:all .2s ease;
 
-.td-name a{
-    color:#82F66F;
-    text-decoration:none;
-    font-weight:600;
-}
+        }
 
-.td-name a:hover{
-    text-decoration:underline;
-}
+        .region-card:hover{
 
-.td-branch{
-    color:#777;
-}
+            border-color:#82F66F;
 
-.td-zip{
-    color:#82F66F;
-    font-family:monospace;
-}
+            color:#82F66F;
 
-.address-cell{
-    white-space:normal;
-    line-height:1.6;
-    word-break:keep-all;
-}
+            transform:translateY(-4px);
 
-.empty-message{
-    text-align:center;
-    padding:40px;
-    color:#888;
-}
+            background:#161616;
 
-/* 모바일 최적화 */
+            box-shadow:
+            0 8px 24px rgba(130,246,111,.15);
 
-@media (max-width:768px){
+        }
 
-    body{
-        padding:20px 10px;
-    }
+        .region-title{
+            font-size:20px;
+            font-weight:700;
+        }
 
-    h1{
-        font-size:22px;
-    }
+        .region-tag{
+            font-size:12px;
+            color:#666;
+            text-transform:uppercase;
+            font-family:monospace;
+        }
 
-    table{
-        min-width:100%;
-    }
+        .region-card:hover .region-tag{
+            color:rgba(130,246,111,.7);
+        }
 
-    th{
-        font-size:12px;
-        padding:12px 8px;
-    }
+        @media (max-width:768px){
 
-    td{
-        font-size:13px;
-        padding:12px 8px;
-    }
+            body{
+                padding:18px;
+            }
 
-    .address-cell{
-        min-width:220px;
-        white-space:normal;
-        word-break:break-word;
-        line-height:1.5;
-    }
+            h1{
+                font-size:28px;
+            }
 
-}
+            .sub{
+                font-size:14px;
+                line-height:1.6;
+            }
 
-</style>
+            .grid-container{
+                grid-template-columns:1fr 1fr;
+            }
+
+            .region-card{
+                padding:24px 14px;
+            }
+
+            .region-title{
+                font-size:18px;
+            }
+
+        }
+
+    </style>
 </head>
 
 <body>
 
 <div class="container">
 
-    <div class="header-area">
+    <h1>
+        전북 상권 DB 검색 시스템
+    </h1>
 
-        <div>
-            <h1>
-                전주시 <span class="target-region" id="region-title"></span> 상권 DB
-            </h1>
+    <p class="sub">
+        공공데이터포털 소상공인 종합정보파일을 기반으로 제작된<br>
+        전북 지역 상권 무료 조회 시스템입니다.<br><br>
 
-            <span class="counter" id="total-count">
-                데이터 불러오는 중...
-            </span>
-        </div>
+        조회하시려는 지역을 선택해 주세요.
+    </p>
 
-        <a href="index.html" class="btn-back">
-            ← 뒤로가기
+    <div class="grid-container">
+
+        <a href="result.html?region=완산구" class="region-card">
+            <span class="region-title">전주 완산구</span>
+            <span class="region-tag">Wansan-gu</span>
+        </a>
+
+        <a href="result.html?region=덕진구" class="region-card">
+            <span class="region-title">전주 덕진구</span>
+            <span class="region-tag">Deokjin-gu</span>
+        </a>
+
+        <a href="result.html?region=군산시" class="region-card">
+            <span class="region-title">군산시</span>
+            <span class="region-tag">Gunsan-si</span>
+        </a>
+
+        <a href="result.html?region=익산시" class="region-card">
+            <span class="region-title">익산시</span>
+            <span class="region-tag">Iksan-si</span>
+        </a>
+
+        <a href="result.html?region=정읍시" class="region-card">
+            <span class="region-title">정읍시</span>
+            <span class="region-tag">Jeongeup-si</span>
+        </a>
+
+        <a href="result.html?region=남원시" class="region-card">
+            <span class="region-title">남원시</span>
+            <span class="region-tag">Namwon-si</span>
+        </a>
+
+        <a href="result.html?region=김제시" class="region-card">
+            <span class="region-title">김제시</span>
+            <span class="region-tag">Gimje-si</span>
+        </a>
+
+        <a href="result.html?region=완주군" class="region-card">
+            <span class="region-title">완주군</span>
+            <span class="region-tag">Wanju-gun</span>
+        </a>
+
+        <a href="result.html?region=진안군" class="region-card">
+            <span class="region-title">진안군</span>
+            <span class="region-tag">Jinan-gun</span>
+        </a>
+
+        <a href="result.html?region=무주군" class="region-card">
+            <span class="region-title">무주군</span>
+            <span class="region-tag">Muju-gun</span>
+        </a>
+
+        <a href="result.html?region=장수군" class="region-card">
+            <span class="region-title">장수군</span>
+            <span class="region-tag">Jangsu-gun</span>
+        </a>
+
+        <a href="result.html?region=임실군" class="region-card">
+            <span class="region-title">임실군</span>
+            <span class="region-tag">Imsil-gun</span>
+        </a>
+
+        <a href="result.html?region=순창군" class="region-card">
+            <span class="region-title">순창군</span>
+            <span class="region-tag">Sunchang-gun</span>
+        </a>
+
+        <a href="result.html?region=고창군" class="region-card">
+            <span class="region-title">고창군</span>
+            <span class="region-tag">Gochang-gun</span>
+        </a>
+
+        <a href="result.html?region=부안군" class="region-card">
+            <span class="region-title">부안군</span>
+            <span class="region-tag">Buan-gun</span>
         </a>
 
     </div>
 
-    <div class="search-box">
-        <input
-            type="text"
-            id="search-input"
-            placeholder="상호명 또는 주소를 입력하세요"
-        >
-    </div>
-
-    <div class="table-wrapper">
-
-        <table>
-
-            <thead>
-                <tr>
-                    <th>상호명</th>
-                    <th>지점명</th>
-                    <th>우편번호</th>
-                    <th>도로명주소</th>
-                </tr>
-            </thead>
-
-            <tbody id="result-table-body"></tbody>
-
-        </table>
-
-    </div>
-
 </div>
-
-<script>
-
-let allData = [];
-let filteredData = [];
-
-window.onload = function(){
-
-    const params = new URLSearchParams(window.location.search);
-
-    const region = params.get('region') || '완산구';
-
-    document.getElementById('region-title').textContent = region;
-
-    loadData(region);
-
-    document.getElementById('search-input')
-    .addEventListener('keyup', function(){
-
-        const keyword = this.value.trim().toLowerCase();
-
-        // 검색어 없으면 지역 데이터 다시 표시
-        if(keyword === ''){
-
-            filteredData = allData.filter(item => {
-
-                return (
-                    item.city.includes(region) ||
-                    item.address.includes(region)
-                );
-
-            });
-
-        }
-
-        else{
-
-            // 전체 데이터에서 검색
-            filteredData = allData.filter(item => {
-
-                const name = String(item.name || '').toLowerCase();
-
-                const address = String(item.address || '').toLowerCase();
-
-                return (
-                    name.includes(keyword) ||
-                    address.includes(keyword)
-                );
-
-            });
-
-        }
-
-        renderTable(filteredData);
-
-    });
-
-};
-
-async function loadData(region){
-
-    const tableBody = document.getElementById('result-table-body');
-
-    const totalCountEl = document.getElementById('total-count');
-
-    try{
-
-        const response = await fetch('./data.json?v=' + Date.now());
-
-        if(!response.ok){
-            throw new Error('JSON 로드 실패');
-        }
-
-        const rawData = await response.json();
-
-        // 전체 데이터 저장
-        allData = rawData.map(item => ({
-
-            name : item["상호명"] || '',
-            branch : item["지점명"] || '',
-            zip : item["신우편번호"] || '',
-            address : item["도로명주소"] || '',
-            city : item["시군구명"] || ''
-
-        }));
-
-        // 처음에는 선택한 구만 표시
-        filteredData = allData.filter(item => {
-
-            return (
-                item.city.includes(region) ||
-                item.address.includes(region)
-            );
-
-        });
-
-        totalCountEl.textContent =
-        `총 ${filteredData.length.toLocaleString()}건 조회됨`;
-
-        renderTable(filteredData);
-
-    }
-
-    catch(error){
-
-        console.error(error);
-
-        totalCountEl.textContent = '데이터 로드 실패';
-
-        tableBody.innerHTML = `
-            <tr>
-                <td colspan="4" class="empty-message">
-                    data.json 파일을 확인해주세요.
-                </td>
-            </tr>
-        `;
-
-    }
-
-}
-
-function renderTable(data){
-
-    const tableBody = document.getElementById('result-table-body');
-
-    const totalCountEl = document.getElementById('total-count');
-
-    totalCountEl.textContent =
-    `총 ${data.length.toLocaleString()}건 조회됨`;
-
-    if(data.length === 0){
-
-        tableBody.innerHTML = `
-            <tr>
-                <td colspan="4" class="empty-message">
-                    검색 결과가 없습니다.
-                </td>
-            </tr>
-        `;
-
-        return;
-
-    }
-
-    tableBody.innerHTML = '';
-
-    const batchSize = 500;
-
-    let index = 0;
-
-    function renderBatch(){
-
-        const fragment = document.createDocumentFragment();
-
-        for(
-            let i = 0;
-            i < batchSize && index < data.length;
-            i++, index++
-        ){
-
-            const item = data[index];
-
-            const row = document.createElement('tr');
-
-            row.innerHTML = `
-
-                <td class="td-name">
-
-                    <a
-                        href="https://map.naver.com/p/search/${encodeURIComponent(item.name)}"
-                        target="_blank"
-                    >
-                        ${escapeHtml(item.name)}
-                    </a>
-
-                </td>
-
-                <td class="td-branch">
-                    ${escapeHtml(item.branch || '-')}
-                </td>
-
-                <td class="td-zip">
-                    ${escapeHtml(item.zip || '-')}
-                </td>
-
-                <td class="address-cell">
-                    ${escapeHtml(item.address)}
-                </td>
-
-            `;
-
-            fragment.appendChild(row);
-
-        }
-
-        tableBody.appendChild(fragment);
-
-        if(index < data.length){
-
-            requestAnimationFrame(renderBatch);
-
-        }
-
-    }
-
-    renderBatch();
-
-}
-
-function escapeHtml(text){
-
-    return String(text)
-
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#039;');
-
-}
-
-</script>
 
 </body>
 </html>
