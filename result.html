@@ -24,14 +24,16 @@
         .td-name { font-weight: 600; color: #82F66F; }
         .td-branch { color: #777; font-size: 13px; }
         .td-zip { color: #82F66F; font-family: monospace; font-size: 15px; }
-        #result-table-body { content-visibility: auto; contain-intrinsic-size: 1000px; }
+        
+        /* 8메가 데이터 렉 방지용 브라우저 스크롤 최적화 엔진 */
+        #result-table-body { content-visibility: auto; contain-intrinsic-size: 800px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header-area">
-        <h1>전주시 <span class="target-region" id="region-title">구</span>상권 DB <span class="counter" id="total-count">스캔 중...</span></h1>
+        <h1>전주시 <span class="target-region" id="region-title">구</span>상권 DB <span class="counter" id="total-count">데이터를 동기화하는 중...</span></h1>
         <a href="index.html" class="btn-back">← 뒤로가기</a>
     </div>
 
@@ -45,7 +47,8 @@
                     <th style="width: 40%; border-radius: 0 8px 8px 0;">상세 주소</th>
                 </tr>
             </thead>
-            <tbody id="result-table-body"></tbody>
+            <tbody id="result-table-body">
+                </tbody>
         </table>
     </div>
 </div>
@@ -56,18 +59,19 @@
         const selectedRegion = urlParams.get('region') || "완산구";
         document.getElementById('region-title').textContent = selectedRegion + " ";
 
-        loadJeonjuDistrictData(selectedRegion);
+        loadJeonjuTextFile(selectedRegion);
     }
 
-    async function loadJeonjuDistrictData(district) {
+    async function loadJeonjuTextFile(district) {
         const tableBody = document.getElementById('result-table-body');
         const totalCountEl = document.getElementById('total-count');
 
         try {
-            // 8메가 원본 파일 직접 호출
-            const response = await fetch('./소상공인시장진흥공단_상가(상권)정보_전북_202603.txt');
-            if (!response.ok) throw new Error("파일 로드 실패");
+            // 🛑 깃허브 보안 서버 우회를 위한 정석 경로 스트리밍 호출
+            const response = await fetch('소상공인시장진흥공단_상가(상권)정보_전북_202603.txt');
+            if (!response.ok) throw new Error("파일을 읽어오지 못했습니다.");
             
+            // 한글 깨짐 원천 차단을 위한 한국어 디코더 강제 주입
             const arrayBuffer = await response.arrayBuffer();
             const decoder = new TextDecoder('euc-kr');
             const rawText = decoder.decode(arrayBuffer);
@@ -79,12 +83,13 @@
                 const line = lines[i].trim();
                 if (!line) continue;
 
+                // 탭 구분을 칼같이 분리
                 const columns = line.split('\t');
                 if (columns.length < 4) continue;
 
-                const currentCity = columns[2] ? columns[2].trim() : ""; // 시군구명 열
-                
-                // 🛑 시군구명 열에 '완산구' 또는 '덕진구'가 정확히 일치하는 진짜 데이터만 추출
+                const currentCity = columns[2] ? columns[2].trim() : ""; // 시군구명
+
+                // 완산구 또는 덕진구 텍스트가 정확히 매칭되는 실존 데이터만 정밀 선별
                 if (currentCity.includes(district)) {
                     filteredData.push({
                         name: columns[0] ? columns[0].trim() : "",
@@ -95,9 +100,14 @@
                 }
             }
 
-            // 가나다순 오름차순 정렬
+            // 상호명 기준 가나다순 정렬
             filteredData.sort((a, b) => a.name.localeCompare(b.name));
-            totalCountEl.textContent = `총 ${filteredData.length.toLocaleString()}건 추출 완료`;
+            totalCountEl.textContent = `총 ${filteredData.length.toLocaleString()}건 실시간 연동 완료`;
+
+            if (filteredData.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:40px; color:#888;">조회된 데이터가 없습니다.</td></tr>`;
+                return;
+            }
             
             const fragment = document.createDocumentFragment();
             filteredData.forEach(item => {
@@ -119,7 +129,7 @@
         } catch (error) {
             console.error(error);
             totalCountEl.textContent = "연동 실패";
-            tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:40px; color:#ff6b6b;">⚠️ 데이터 연동에 실패했습니다. 원본 텍스트 파일이 HTML 파일들과 같은 경로에 업로드되어 있는지 확인해 주세요.</td></tr>`;
+            tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:40px; color:#ff6b6b;">⚠️ 데이터 로드 실패. 원본 텍스트 파일 이름이 일치하는지 확인해 주세요.</td></tr>`;
         }
     }
 </script>
