@@ -3,41 +3,200 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>전주시 상권 데이터베이스</title>
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+
+    <title>전주시 상권 DB 검색 시스템</title>
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"
+    />
+
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; letter-spacing: -0.02em; }
-        body { background-color: #0b0b0b; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; }
-        .container { width: 100%; max-width: 600px; text-align: center; }
-        h1 { font-size: 32px; font-weight: 700; margin-bottom: 12px; color: #82F66F; }
-        p.sub { color: #888888; font-size: 15px; margin-bottom: 40px; font-weight: 300; line-height: 1.5; }
-        
-        /* 2분할 미니멀 그리드 */
-        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 100%; }
-        .region-card { 
-            background: #121212; border: 1px solid #222222; padding: 40px 20px; border-radius: 16px; 
-            text-align: center; cursor: pointer; transition: all 0.2s ease; text-decoration: none; color: #cccccc;
-            display: flex; flex-direction: column; gap: 8px;
+
+        *{
+            box-sizing:border-box;
+            margin:0;
+            padding:0;
+            font-family:'Pretendard',sans-serif;
+            letter-spacing:-0.02em;
         }
-        .region-card:hover { 
-            border-color: #82F66F; color: #82F66F; transform: translateY(-4px); background: #161616;
-            box-shadow: 0 8px 24px rgba(130, 246, 111, 0.15);
+
+        body{
+            background:#0b0b0b;
+            color:#fff;
+            min-height:100vh;
+
+            display:flex;
+            align-items:center;
+            justify-content:center;
+
+            padding:24px;
         }
-        .region-title { font-size: 20px; font-weight: 700; }
-        .region-tag { font-size: 12px; color: #555555; text-transform: uppercase; font-family: monospace; }
-        .region-card:hover .region-tag { color: rgba(130, 246, 111, 0.6); }
+
+        .container{
+            width:100%;
+            max-width:620px;
+            text-align:center;
+        }
+
+        h1{
+            font-size:34px;
+            font-weight:700;
+            margin-bottom:14px;
+            color:#82F66F;
+        }
+
+        .sub{
+            color:#8a8a8a;
+            font-size:15px;
+            line-height:1.7;
+            margin-bottom:42px;
+            word-break:keep-all;
+        }
+
+        .grid-container{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:20px;
+            width:100%;
+        }
+
+        .region-card{
+
+            background:#121212;
+            border:1px solid #222;
+
+            border-radius:18px;
+
+            padding:42px 20px;
+
+            text-decoration:none;
+
+            color:#ccc;
+
+            display:flex;
+            flex-direction:column;
+            gap:10px;
+
+            transition:all .2s ease;
+
+        }
+
+        .region-card:hover{
+
+            border-color:#82F66F;
+
+            color:#82F66F;
+
+            transform:translateY(-4px);
+
+            background:#161616;
+
+            box-shadow:
+            0 8px 24px rgba(130,246,111,.15);
+
+        }
+
+        .region-title{
+            font-size:22px;
+            font-weight:700;
+        }
+
+        .region-tag{
+            font-size:12px;
+            color:#666;
+            text-transform:uppercase;
+            font-family:monospace;
+        }
+
+        .region-card:hover .region-tag{
+            color:rgba(130,246,111,.7);
+        }
+
+        .footer-text{
+            margin-top:28px;
+            color:#555;
+            font-size:12px;
+            line-height:1.6;
+        }
+
+        @media (max-width:768px){
+
+            body{
+                padding:18px;
+            }
+
+            h1{
+                font-size:28px;
+            }
+
+            .sub{
+                font-size:14px;
+                line-height:1.6;
+            }
+
+            .grid-container{
+                grid-template-columns:1fr;
+            }
+
+            .region-card{
+                padding:32px 18px;
+            }
+
+        }
+
     </style>
 </head>
+
 <body>
 
 <div class="container">
-    <h1>전주시 상권 DB 검색 시스템</h1>
-    <p class="sub">공공데이터포털 원본을 기반으로 작동하는 전주시 전용 시스템입니다.<br>조회하시려는 자치구를 선택해 주세요.</p>
+
+    <h1>
+        전주시 상권 DB 검색 시스템
+    </h1>
+
+    <p class="sub">
+        공공데이터포털 소상공인 종합정보파일을 기반으로 제작된<br>
+        전주시 상권 무료 조회 시스템입니다.<br><br>
+
+        조회하시려는 자치구를 선택해 주세요.
+    </p>
 
     <div class="grid-container">
-        <a href="result.html?region=완산구" class="region-card"><span class="region-title">완산구</span><span class="region-tag">Wansan-gu</span></a>
-        <a href="result.html?region=덕진구" class="region-card"><span class="region-title">덕진구</span><span class="region-tag">Deokjin-gu</span></a>
+
+        <a
+            href="result.html?region=완산구"
+            class="region-card"
+        >
+            <span class="region-title">
+                완산구
+            </span>
+
+            <span class="region-tag">
+                Wansan-gu
+            </span>
+        </a>
+
+        <a
+            href="result.html?region=덕진구"
+            class="region-card"
+        >
+            <span class="region-title">
+                덕진구
+            </span>
+
+            <span class="region-tag">
+                Deokjin-gu
+            </span>
+        </a>
+
     </div>
+
+    <p class="footer-text">
+        본 사이트는 공공데이터를 기반으로 제작된 비상업적 조회 시스템입니다.
+    </p>
+
 </div>
 
 </body>
