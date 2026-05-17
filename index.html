@@ -8,40 +8,20 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', sans-serif; letter-spacing: -0.02em; }
         body { background-color: #0b0b0b; color: #ffffff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 24px; }
-        
         .container { width: 100%; max-width: 900px; text-align: center; }
         h1 { font-size: 36px; font-weight: 700; margin-bottom: 12px; color: #82F66F; }
         p.sub { color: #888888; font-size: 16px; margin-bottom: 48px; font-weight: 300; line-height: 1.5; }
-        
-        /* 전북 14개 시·군 반응형 그리드 */
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px; width: 100%; }
-        
         .region-card { 
-            background: #121212; 
-            border: 1px solid #222222; 
-            padding: 28px 20px; 
-            border-radius: 14px; 
-            text-align: center; 
-            cursor: pointer; 
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); 
-            text-decoration: none; 
-            color: #cccccc;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
+            background: #121212; border: 1px solid #222222; padding: 28px 20px; border-radius: 14px; text-align: center; cursor: pointer; 
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); text-decoration: none; color: #cccccc; display: flex; flex-direction: column; gap: 6px;
         }
-        
-        /* 마우스 호버 효과: 네온 그린 테두리 및 텍스트 전환 */
         .region-card:hover { 
-            border-color: #82F66F; 
-            color: #82F66F; 
-            transform: translateY(-4px); 
-            background: #161616;
+            border-color: #82F66F; color: #82F66F; transform: translateY(-4px); background: #161616;
             box-shadow: 0 8px 24px rgba(130, 246, 111, 0.15);
         }
-        
         .region-title { font-size: 18px; font-weight: 700; }
-        .region-tag { font-size: 11px; color: #555555; text-transform: uppercase; font-family: monospace; transition: color 0.25s; }
+        .region-tag { font-size: 11px; color: #555555; text-transform: uppercase; font-family: monospace; }
         .region-card:hover .region-tag { color: rgba(130, 246, 111, 0.6); }
     </style>
 </head>
@@ -49,26 +29,23 @@
 
 <div class="container">
     <h1>전북 상권 데이터 통합 검색</h1>
-    <p class="sub">
-        소상공인시장진흥공단 오픈 데이터를 기반으로 구축된 시스템입니다.<br>
-        조회하시려는 전라북도 산하의 시·군 지역을 선택해 주세요.
-    </p>
+    <p class="sub">소상공인시장진흥공단 2026년 3월 최신 오픈 데이터를 기반으로 구축되었습니다.<br>조회하시려는 전라북도 산하의 시·군 지역을 선택해 주세요.</p>
 
     <div class="grid-container">
         <a href="result.html?region=전주시" class="region-card"><span class="region-title">전주시</span><span class="region-tag">Jeonju-si</span></a>
         <a href="result.html?region=익산시" class="region-card"><span class="region-title">익산시</span><span class="region-tag">Iksan-si</span></a>
         <a href="result.html?region=군산시" class="region-card"><span class="region-title">군산시</span><span class="region-tag">Gunsan-si</span></a>
-        <a href="region=정읍시" class="region-card" onclick="location.href='result.html?region='+encodeURIComponent('정읍시'); return false;"><span class="region-title">정읍시</span><span class="region-tag">Jeongeup-si</span></a>
-        <a href="region=남원시" class="region-card" onclick="location.href='result.html?region='+encodeURIComponent('남원시'); return false;"><span class="region-title">남원시</span><span class="region-tag">Namwon-si</span></a>
-        <a href="region=김제시" class="region-card" onclick="location.href='result.html?region='+encodeURIComponent('김제시'); return false;"><span class="region-title">김제시</span><span class="region-tag">Gimje-si</span></a>
-        <a href="region=완주군" class="region-card" onclick="location.href='result.html?region='+encodeURIComponent('완주군'); return false;"><span class="region-title">완주군</span><span class="region-tag">Wanju-gun</span></a>
-        <a href="region=고창군" class="region-card" onclick="location.href='result.html?region='+encodeURIComponent('고창군'); return false;"><span class="region-title">고창군</span><span class="region-tag">Gochang-gun</span></a>
-        <a href="region=부안군" class="region-card" onclick="location.href='result.html?region='+encodeURIComponent('부안군'); return false;"><span class="region-title">부안군</span><span class="region-tag">Buan-gun</span></a>
-        <a href="region=순창군" class="region-card" onclick="location.href='result.html?region='+encodeURIComponent('순창군'); return false;"><span class="region-title">순창군</span><span class="region-tag">Sunchang-gun</span></a>
-        <a href="region=임실군" class="region-card" onclick="location.href='result.html?region='+encodeURIComponent('임실군'); return false;"><span class="region-title">임실군</span><span class="region-tag">Imsil-gun</span></a>
-        <a href="region=무주군" class="region-card" onclick="location.href='result.html?region='+encodeURIComponent('무주군'); return false;"><span class="region-title">무주군</span><span class="region-tag">Muju-gun</span></a>
-        <a href="region=장수군" class="region-card" onclick="location.href='result.html?region='+encodeURIComponent('장수군'); return false;"><span class="region-title">장수군</span><span class="region-tag">Jangsu-gun</span></a>
-        <a href="region=진안군" class="region-card" onclick="location.href='result.html?region='+encodeURIComponent('진안군'); return false;"><span class="region-title">진안군</span><span class="region-tag">Jinan-gun</span></a>
+        <a href="result.html?region=정읍시" class="region-card"><span class="region-title">정읍시</span><span class="region-tag">Jeongeup-si</span></a>
+        <a href="result.html?region=남원시" class="region-card"><span class="region-title">남원시</span><span class="region-tag">Namwon-si</span></a>
+        <a href="result.html?region=김제시" class="region-card"><span class="region-title">김제시</span><span class="region-tag">Gimje-si</span></a>
+        <a href="result.html?region=완주군" class="region-card"><span class="region-title">완주군</span><span class="region-tag">Wanju-gun</span></a>
+        <a href="result.html?region=고창군" class="region-card"><span class="region-title">고창군</span><span class="region-tag">Gochang-gun</span></a>
+        <a href="result.html?region=부안군" class="region-card"><span class="region-title">부안군</span><span class="region-tag">Buan-gun</span></a>
+        <a href="result.html?region=순창군" class="region-card"><span class="region-title">순창군</span><span class="region-tag">Sunchang-gun</span></a>
+        <a href="result.html?region=임실군" class="region-card"><span class="region-title">임실군</span><span class="region-tag">Imsil-gun</span></a>
+        <a href="result.html?region=무주군" class="region-card"><span class="region-title">무주군</span><span class="region-tag">Muju-gun</span></a>
+        <a href="result.html?region=장수군" class="region-card"><span class="region-title">장수군</span><span class="region-tag">Jangsu-gun</span></a>
+        <a href="result.html?region=진안군" class="region-card"><span class="region-title">진안군</span><span class="region-tag">Jinan-gun</span></a>
     </div>
 </div>
 
