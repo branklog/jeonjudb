@@ -210,10 +210,10 @@ tr:hover td{
     </div>
 
     <div class="search-box">
-        <input 
+        <input
             type="text"
             id="search-input"
-            placeholder="상호명을 입력하세요"
+            placeholder="상호명 또는 주소를 입력하세요"
         >
     </div>
 
@@ -254,17 +254,41 @@ window.onload = function(){
     loadData(region);
 
     document.getElementById('search-input')
-    .addEventListener('input', function(){
+    .addEventListener('keyup', function(){
 
         const keyword = this.value.trim().toLowerCase();
 
-        filteredData = allData.filter(item => {
+        // 검색어 없으면 지역 데이터 다시 표시
+        if(keyword === ''){
 
-            return (
-                item.name.toLowerCase().includes(keyword)
-            );
+            filteredData = allData.filter(item => {
 
-        });
+                return (
+                    item.city.includes(region) ||
+                    item.address.includes(region)
+                );
+
+            });
+
+        }
+
+        else{
+
+            // 전체 데이터에서 검색
+            filteredData = allData.filter(item => {
+
+                const name = String(item.name || '').toLowerCase();
+
+                const address = String(item.address || '').toLowerCase();
+
+                return (
+                    name.includes(keyword) ||
+                    address.includes(keyword)
+                );
+
+            });
+
+        }
 
         renderTable(filteredData);
 
@@ -288,34 +312,29 @@ async function loadData(region){
 
         const rawData = await response.json();
 
-        allData = rawData
-
-        .filter(item => {
-
-            return (
-                (item["시군구명"] || '').includes(region) ||
-                (item["도로명주소"] || '').includes(region)
-            );
-
-        })
-
-        .map(item => ({
+        // 전체 데이터 저장
+        allData = rawData.map(item => ({
 
             name : item["상호명"] || '',
             branch : item["지점명"] || '',
             zip : item["신우편번호"] || '',
-            address : item["도로명주소"] || ''
+            address : item["도로명주소"] || '',
+            city : item["시군구명"] || ''
 
-        }))
+        }));
 
-        .sort((a,b) =>
-            a.name.localeCompare(b.name,'ko')
-        );
+        // 처음에는 선택한 구만 표시
+        filteredData = allData.filter(item => {
 
-        filteredData = [...allData];
+            return (
+                item.city.includes(region) ||
+                item.address.includes(region)
+            );
+
+        });
 
         totalCountEl.textContent =
-        `총 ${allData.length.toLocaleString()}건 조회됨`;
+        `총 ${filteredData.length.toLocaleString()}건 조회됨`;
 
         renderTable(filteredData);
 
