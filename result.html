@@ -15,7 +15,6 @@
         .counter { font-size: 16px; color: #82F66F; font-weight: 400; }
         .btn-back { font-size: 14px; color: #888888; text-decoration: none; border-bottom: 1px solid transparent; transition: all 0.2s ease; }
         .btn-back:hover { color: #82F66F; border-bottom: 1px solid #82F66F; }
-        
         .table-wrapper { background: #121212; border-radius: 16px; padding: 12px; box-shadow: 0 4px 30px rgba(0,0,0,0.5); }
         table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.5; }
         th { padding: 18px 16px; text-align: left; font-weight: 600; color: #888888; background-color: #1a1a1a; font-size: 13px; position: sticky; top: 0; }
@@ -24,16 +23,15 @@
         .td-name { font-weight: 600; color: #82F66F; }
         .td-branch { color: #777; font-size: 13px; }
         .td-zip { color: #82F66F; font-family: monospace; font-size: 15px; }
-        
-        /* 8메가 데이터 렉 방지용 브라우저 스크롤 최적화 엔진 */
-        #result-table-body { content-visibility: auto; contain-intrinsic-size: 800px; }
+        #result-table-body { content-visibility: auto; contain-intrinsic-size: 600px; }
     </style>
+    <script src="data.js"></script>
 </head>
 <body>
 
 <div class="container">
     <div class="header-area">
-        <h1>전주시 <span class="target-region" id="region-title">구</span>상권 DB <span class="counter" id="total-count">데이터를 동기화하는 중...</span></h1>
+        <h1>전주시 <span class="target-region" id="region-title">구</span>상권 DB <span class="counter" id="total-count">8MB 데이터 동기화 중...</span></h1>
         <a href="index.html" class="btn-back">← 뒤로가기</a>
     </div>
 
@@ -47,8 +45,7 @@
                     <th style="width: 40%; border-radius: 0 8px 8px 0;">상세 주소</th>
                 </tr>
             </thead>
-            <tbody id="result-table-body">
-                </tbody>
+            <tbody id="result-table-body"></tbody>
         </table>
     </div>
 </div>
@@ -59,78 +56,66 @@
         const selectedRegion = urlParams.get('region') || "완산구";
         document.getElementById('region-title').textContent = selectedRegion + " ";
 
-        loadJeonjuTextFile(selectedRegion);
+        if (typeof rawTxtData === "undefined") {
+            // 자바스크립트 파일 형식에 맞추기 위해 실시간으로 변수를 주입해 줍니다.
+            fetch('data.js').then(r => r.text()).then(t => {
+                window.rawTxtData = t;
+                runParsingEngine(selectedRegion);
+            }).catch(() => {
+                document.getElementById('total-count').textContent = "연동 실패";
+            });
+        } else {
+            runParsingEngine(selectedRegion);
+        }
     }
 
-    async function loadJeonjuTextFile(district) {
+    function runParsingEngine(district) {
         const tableBody = document.getElementById('result-table-body');
         const totalCountEl = document.getElementById('total-count');
 
-        try {
-            // 🛑 깃허브 보안 서버 우회를 위한 정석 경로 스트리밍 호출
-            const response = await fetch('소상공인시장진흥공단_상가(상권)정보_전북_202603.txt');
-            if (!response.ok) throw new Error("파일을 읽어오지 못했습니다.");
-            
-            // 한글 깨짐 원천 차단을 위한 한국어 디코더 강제 주입
-            const arrayBuffer = await response.arrayBuffer();
-            const decoder = new TextDecoder('euc-kr');
-            const rawText = decoder.decode(arrayBuffer);
+        const lines = window.rawTxtData.split('\n');
+        const filteredData = [];
 
-            const lines = rawText.split(/\r?\n/);
-            const filteredData = [];
+        let len = lines.length;
+        for (let i = 1; i < len; i++) {
+            let line = lines[i];
+            if (!line) continue;
 
-            for (let i = 1; i < lines.length; i++) {
-                const line = lines[i].trim();
-                if (!line) continue;
+            let columns = line.split('\t');
+            if (columns.length < 4) continue;
 
-                // 탭 구분을 칼같이 분리
-                const columns = line.split('\t');
-                if (columns.length < 4) continue;
+            let currentCity = columns[2] ? columns[2].trim() : "";
 
-                const currentCity = columns[2] ? columns[2].trim() : ""; // 시군구명
-
-                // 완산구 또는 덕진구 텍스트가 정확히 매칭되는 실존 데이터만 정밀 선별
-                if (currentCity.includes(district)) {
-                    filteredData.push({
-                        name: columns[0] ? columns[0].trim() : "",
-                        branch: columns[1] ? columns[1].trim() : "",
-                        address: columns[3] ? columns[3].trim() : "",
-                        zip: columns[4] ? columns[4].trim() : ""
-                    });
-                }
+            if (currentCity.indexOf(district) !== -1) {
+                filteredData.push({
+                    name: columns[0] ? columns[0].trim() : "",
+                    branch: columns[1] ? columns[1].trim() : "",
+                    address: columns[3] ? columns[3].trim() : "",
+                    zip: columns[4] ? columns[4].trim() : ""
+                });
             }
-
-            // 상호명 기준 가나다순 정렬
-            filteredData.sort((a, b) => a.name.localeCompare(b.name));
-            totalCountEl.textContent = `총 ${filteredData.length.toLocaleString()}건 실시간 연동 완료`;
-
-            if (filteredData.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:40px; color:#888;">조회된 데이터가 없습니다.</td></tr>`;
-                return;
-            }
-            
-            const fragment = document.createDocumentFragment();
-            filteredData.forEach(item => {
-                if(item.name) {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td class="td-name">${item.name}</td>
-                        <td class="td-branch">${item.branch || "-"}</td>
-                        <td class="td-zip">${item.zip || "-"}</td>
-                        <td>${item.address}</td>
-                    `;
-                    fragment.appendChild(row);
-                }
-            });
-            
-            tableBody.innerHTML = ''; 
-            tableBody.appendChild(fragment);
-
-        } catch (error) {
-            console.error(error);
-            totalCountEl.textContent = "연동 실패";
-            tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:40px; color:#ff6b6b;">⚠️ 데이터 로드 실패. 원본 텍스트 파일 이름이 일치하는지 확인해 주세요.</td></tr>`;
         }
+
+        filteredData.sort((a, b) => a.name.localeCompare(b.name));
+        totalCountEl.textContent = `총 ${filteredData.length.toLocaleString()}건 실시간 연동 완료`;
+
+        const fragment = document.createDocumentFragment();
+        let filteredLen = filteredData.length;
+        for (let j = 0; j < filteredLen; j++) {
+            let item = filteredData[j];
+            if (item.name) {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="td-name">${item.name}</td>
+                    <td class="td-branch">${item.branch || "-"}</td>
+                    <td class="td-zip">${item.zip || "-"}</td>
+                    <td>${item.address}</td>
+                `;
+                fragment.appendChild(row);
+            }
+        }
+        tableBody.innerHTML = ''; 
+        tableBody.appendChild(fragment);
     }
 </script>
 </body>
